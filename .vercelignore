@@ -3,6 +3,7 @@
 .env
 node_modules/
 inner-site/node_modules/
+inner-site/.git-local-backup/
 inner-site/dist/
 inner-site/public/downloads/
 static/textures/monitor/video/real.mp4
