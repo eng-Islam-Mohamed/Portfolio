@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "npm ci --ignore-scripts && npm --prefix inner-site ci --ignore-scripts",
+  "installCommand": "npm ci --ignore-scripts && npm --prefix inner-site install --ignore-scripts",
   "buildCommand": "npm run build",
   "outputDirectory": "public",
   "functions": {
