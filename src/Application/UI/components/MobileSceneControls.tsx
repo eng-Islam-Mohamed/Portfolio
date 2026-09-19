@@ -3,19 +3,28 @@ import UIEventBus from '../EventBus';
 
 type SceneMode = 'desk' | 'monitor';
 
-const isMobileViewport = () => window.innerWidth < 900;
+const isMobileViewport = () => {
+    const isTouchDevice =
+        navigator.maxTouchPoints > 0 ||
+        window.matchMedia('(pointer: coarse)').matches;
+
+    return (
+        window.innerWidth < 900 ||
+        (isTouchDevice && Math.min(window.innerWidth, window.innerHeight) < 900)
+    );
+};
 
 const MobileSceneControls: React.FC = () => {
     const [isMobile, setIsMobile] = useState(isMobileViewport);
     const [portrait, setPortrait] = useState(
-        window.innerHeight > window.innerWidth
+        window.matchMedia('(orientation: portrait)').matches
     );
     const [mode, setMode] = useState<SceneMode>('desk');
 
     useEffect(() => {
         const onResize = () => {
             setIsMobile(isMobileViewport());
-            setPortrait(window.innerHeight > window.innerWidth);
+            setPortrait(window.matchMedia('(orientation: portrait)').matches);
         };
         const onEnterMonitor = () => setMode('monitor');
         const onLeaveMonitor = () => setMode('desk');

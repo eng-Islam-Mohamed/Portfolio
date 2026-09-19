@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import eventBus from '../EventBus';
 
 type LoadingProps = {};
@@ -19,19 +19,55 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
     const [webGLError, setWebGLError] = useState(false);
     const [counter, setCounter] = useState(0);
     const [resources] = useState<string[]>([]);
-    const getViewport = () => ({
-        isMobile: window.innerWidth < 900,
-        isPortrait: window.innerHeight > window.innerWidth,
-    });
+    const getViewport = () => {
+        const isTouchDevice =
+            navigator.maxTouchPoints > 0 ||
+            window.matchMedia('(pointer: coarse)').matches;
+
+        return {
+            // Large iPhones can be wider than 900px in landscape. Keep them in
+            // mobile mode by also considering touch capability and the short edge.
+            isMobile:
+                window.innerWidth < 900 ||
+                (isTouchDevice &&
+                    Math.min(window.innerWidth, window.innerHeight) < 900),
+            isPortrait: window.matchMedia('(orientation: portrait)').matches,
+        };
+    };
     const [viewport, setViewport] = useState(getViewport);
+    const orientationTimers = useRef<number[]>([]);
 
     useEffect(() => {
-        const onResize = () => setViewport(getViewport());
-        window.addEventListener('resize', onResize);
-        window.addEventListener('orientationchange', onResize);
+        const refreshViewport = () => setViewport(getViewport());
+        const onOrientationChange = () => {
+            refreshViewport();
+
+            // Mobile Safari can fire orientationchange before the viewport
+            // dimensions have settled, so check it again after the rotation.
+            orientationTimers.current.forEach(window.clearTimeout);
+            orientationTimers.current = [100, 300].map((delay) =>
+                window.setTimeout(refreshViewport, delay)
+            );
+        };
+
+        const orientationQuery = window.matchMedia('(orientation: portrait)');
+
+        window.addEventListener('resize', refreshViewport);
+        window.addEventListener('orientationchange', onOrientationChange);
+        if (orientationQuery.addEventListener) {
+            orientationQuery.addEventListener('change', onOrientationChange);
+        } else {
+            orientationQuery.addListener(onOrientationChange);
+        }
         return () => {
-            window.removeEventListener('resize', onResize);
-            window.removeEventListener('orientationchange', onResize);
+            window.removeEventListener('resize', refreshViewport);
+            window.removeEventListener('orientationchange', onOrientationChange);
+            if (orientationQuery.removeEventListener) {
+                orientationQuery.removeEventListener('change', onOrientationChange);
+            } else {
+                orientationQuery.removeListener(onOrientationChange);
+            }
+            orientationTimers.current.forEach(window.clearTimeout);
         };
     }, []);
 
@@ -100,6 +136,25 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
     const viewMobilePortfolio = useCallback(() => {
         window.location.assign('/os/?mobile=1');
     }, []);
+
+    useEffect(() => {
+        if (
+            viewport.isMobile &&
+            !viewport.isPortrait &&
+            doneLoading &&
+            startPopupOpacity > 0 &&
+            overlayOpacity > 0
+        ) {
+            start();
+        }
+    }, [
+        doneLoading,
+        overlayOpacity,
+        start,
+        startPopupOpacity,
+        viewport.isMobile,
+        viewport.isPortrait,
+    ]);
 
     const getSpace = (sourceName: string) => {
         let spaces = '';
