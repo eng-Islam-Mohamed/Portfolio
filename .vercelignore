@@ -5,5 +5,6 @@ node_modules/
 inner-site/node_modules/
 inner-site/dist/
 inner-site/public/downloads/
+static/textures/monitor/video/real.mp4
 public/
 artifacts/
