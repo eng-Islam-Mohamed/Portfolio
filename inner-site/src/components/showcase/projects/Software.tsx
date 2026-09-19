@@ -41,7 +41,7 @@ const SoftwareProjects: React.FC = () => {
       <ul className="project-links">
         {project.live && <li><a href={project.live} target="_blank" rel="noreferrer">[Live Website] — {project.name}</a></li>}
         {project.repo && <li><a href={project.repo} target="_blank" rel="noreferrer">[GitHub] — {project.privateRepo ? 'Private repository' : 'Source code'}</a></li>}
-        {project.download && <li><a href={'/os/downloads/' + project.download.file} download={project.download.file} target="_self">[Android APK] — {project.download.label} ({project.download.size})</a></li>}
+        {project.download && <li><a href={project.download.url || '/os/downloads/' + project.download.file} download={project.download.url ? undefined : project.download.file} target={project.download.url ? '_blank' : '_self'} rel={project.download.url ? 'noreferrer' : undefined}>[Android APK] — {project.download.label} ({project.download.size})</a></li>}
       </ul>
     </section>)}
   </div>;

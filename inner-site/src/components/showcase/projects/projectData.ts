@@ -3,7 +3,7 @@ export type PortfolioProject = {
   id: string; name: string; subtitle: string; category: string; description: string;
   features: string[]; tags: string; screenshots: ProjectScreenshot[];
   live?: string; repo?: string; privateRepo?: boolean;
-  download?: { file: string; label: string; size: string };
+  download?: { file: string; label: string; size: string; url?: string };
 };
 export const projects: PortfolioProject[] = [
   {
@@ -95,7 +95,8 @@ export const projects: PortfolioProject[] = [
     "download": {
       "file": "sanad.apk",
       "label": "Download Sanad for Android",
-      "size": "59.2 MB"
+      "size": "59.2 MB",
+      "url": "https://github.com/eng-Islam-Mohamed/Portfolio/releases/download/portfolio-apps-v1/sanad.apk"
     }
   },
   {
@@ -205,7 +206,8 @@ export const projects: PortfolioProject[] = [
     "download": {
       "file": "the-outsider.apk",
       "label": "Download The Outsider for Android",
-      "size": "69.1 MB"
+      "size": "69.1 MB",
+      "url": "https://github.com/eng-Islam-Mohamed/Portfolio/releases/download/portfolio-apps-v1/the-outsider.apk"
     }
   },
   {

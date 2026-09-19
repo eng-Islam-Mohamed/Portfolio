@@ -4,5 +4,6 @@
 node_modules/
 inner-site/node_modules/
 inner-site/dist/
+inner-site/public/downloads/
 public/
 artifacts/
