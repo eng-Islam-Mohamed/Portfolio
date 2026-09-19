@@ -7,5 +7,5 @@ inner-site/.git-local-backup/
 inner-site/dist/
 inner-site/public/downloads/
 static/textures/monitor/video/real.mp4
-public/
+/public/
 artifacts/
