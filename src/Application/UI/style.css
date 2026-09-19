@@ -215,6 +215,13 @@ br {
     line-height: 1.45;
 }
 
+.orientation-feedback {
+    margin-top: 12px;
+    color: #67ff8a;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
 .phone-rotate {
     position: relative;
     width: 70px;

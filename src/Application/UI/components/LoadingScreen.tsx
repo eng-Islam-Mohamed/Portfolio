@@ -17,6 +17,7 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
     const [showLoadingResources, setShowLoadingResources] = useState(false);
     const [doneLoading, setDoneLoading] = useState(false);
     const [webGLError, setWebGLError] = useState(false);
+    const [landscapeMessage, setLandscapeMessage] = useState('');
     const [counter, setCounter] = useState(0);
     const [resources] = useState<string[]>([]);
     const getViewport = () => {
@@ -137,24 +138,20 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
         window.location.assign('/os/?mobile=1');
     }, []);
 
-    useEffect(() => {
-        if (
-            viewport.isMobile &&
-            !viewport.isPortrait &&
-            doneLoading &&
-            startPopupOpacity > 0 &&
-            overlayOpacity > 0
-        ) {
-            start();
+    const startHorizontalExperience = useCallback(() => {
+        const currentViewport = getViewport();
+        setViewport(currentViewport);
+
+        if (currentViewport.isPortrait) {
+            setLandscapeMessage(
+                'Turn your phone sideways, then tap the button again.'
+            );
+            return;
         }
-    }, [
-        doneLoading,
-        overlayOpacity,
-        start,
-        startPopupOpacity,
-        viewport.isMobile,
-        viewport.isPortrait,
-    ]);
+
+        setLandscapeMessage('');
+        start();
+    }, [start]);
 
     const getSpace = (sourceName: string) => {
         let spaces = '';
@@ -308,23 +305,28 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
                                 </div>
                                 <div className="orientation-copy">
                                     <p><b>Best in landscape</b></p>
-                                    <p>Rotate your phone for the full 3D desk, or open the mobile portfolio now.</p>
+                                    <p>Turn your phone sideways, then tap the button below to open the full 3D desk.</p>
                                 </div>
                             </div>
+                            {landscapeMessage && (
+                                <p className="orientation-feedback" role="status">
+                                    {landscapeMessage}
+                                </p>
+                            )}
                             <div className="start-popup-actions">
                                 <button
                                     type="button"
                                     className="bios-action bios-action-primary"
-                                    onClick={viewMobilePortfolio}
+                                    onClick={startHorizontalExperience}
                                 >
-                                    VIEW MOBILE PORTFOLIO
+                                    START HORIZONTAL 3D
                                 </button>
                                 <button
                                     type="button"
                                     className="bios-action bios-action-secondary"
-                                    onClick={start}
+                                    onClick={viewMobilePortfolio}
                                 >
-                                    LAUNCH 3D ANYWAY
+                                    VIEW MOBILE PORTFOLIO
                                 </button>
                             </div>
                         </>
@@ -332,7 +334,7 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
                     {(!viewport.isMobile || !viewport.isPortrait) && (
                         <>
                             {viewport.isMobile && (
-                                <p className="landscape-ready">● LANDSCAPE MODE READY</p>
+                                <p className="landscape-ready">● LANDSCAPE READY · TAP TO OPEN</p>
                             )}
                             <div className="start-prompt">
                                 <p>Everything is loaded. Choose how you want to explore.{`\xa0`}</p>
@@ -342,9 +344,15 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
                                 <button
                                     type="button"
                                     className="bios-action bios-action-primary"
-                                    onClick={start}
+                                    onClick={
+                                        viewport.isMobile
+                                            ? startHorizontalExperience
+                                            : start
+                                    }
                                 >
-                                    START 3D EXPERIENCE
+                                    {viewport.isMobile
+                                        ? 'START HORIZONTAL 3D'
+                                        : 'START 3D EXPERIENCE'}
                                 </button>
                                 {viewport.isMobile && (
                                     <button
