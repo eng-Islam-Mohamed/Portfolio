@@ -1,29 +1,41 @@
-# henryheffernan.com
+# Mohamed Islam Showcase
 
-This is one of two repositories created for my portfolio website <a href="https://henryheffernan.com/"><samp>henryheffernan.com</samp></a>. If you are looking for the 2D OS repository you can find it <a href="https://github.com/henryjeff/portfolio-inner-site"><samp>here</samp></a>! Thanks for taking the time to check this out. If you have any questions of comments, feel free to shoot me an email at <samp><a href="mailto:henryheffernan@gmail.com">henryheffernan@gmail.com</a></samp> or you can DM me on twitter <a href="https://twitter.com/henryheffernan"><samp>@henryheffernan</samp></a>.
+An interactive portfolio for Mohamed Islam, a software engineer at ESI — the National Higher School of Computer Science in Algeria.
 
-<br>
+The experience combines a responsive 3D workspace, a retro computer interface, and a dedicated mobile portfolio. It presents selected web, mobile, game, and AI projects with real screenshots, demos, source links, and Android downloads.
 
-To setup a dev environment:
+## Highlights
+
+- Responsive Three.js workspace with touch-friendly mobile controls
+- Interactive retro desktop embedded in the computer monitor
+- Mobile-first portfolio with About, Experience, Projects, and Contact pages
+- Galleries for WorldLens, ChronoLivre, Sanad, Wasslago, LeadAgent, Quantum Tutor, The Outsider, and My Vault
+- Working WhatsApp and email contact options
+- Vercel serverless contact endpoint using Resend
+
+## Local development
 
 ```bash
-# Clone the repository
-
-# Install dependencies 
-npm i
-
-# Run the local dev server
+npm install
 npm run dev
 ```
 
-To serve a production build:
+Open `http://127.0.0.1:3000`.
+
+## Production build
 
 ```bash
-# Install dependencies if not already done - 'npi i'
-
-# Build for production
+npm run typecheck
 npm run build
-
-# Serve the build using express
 npm start
 ```
+
+Copy `.env.example` to `.env` and add a Resend API key to enable email delivery locally. Environment secrets are excluded from Git.
+
+## Deployment
+
+The project is configured for Vercel. The build generates the complete site in `public/`, while `api/contact.js` provides the production contact endpoint.
+
+## Author
+
+[Mohamed Islam](https://github.com/eng-Islam-Mohamed)

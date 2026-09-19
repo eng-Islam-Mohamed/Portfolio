@@ -19,17 +19,21 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
     const [webGLError, setWebGLError] = useState(false);
     const [counter, setCounter] = useState(0);
     const [resources] = useState<string[]>([]);
-    const [mobileWarning, setMobileWarning] = useState(window.innerWidth < 768);
+    const getViewport = () => ({
+        isMobile: window.innerWidth < 900,
+        isPortrait: window.innerHeight > window.innerWidth,
+    });
+    const [viewport, setViewport] = useState(getViewport);
 
-    const onResize = () => {
-        if (window.innerWidth < 768) {
-            setMobileWarning(true);
-        } else {
-            setMobileWarning(false);
-        }
-    };
-
-    window.addEventListener('resize', onResize);
+    useEffect(() => {
+        const onResize = () => setViewport(getViewport());
+        window.addEventListener('resize', onResize);
+        window.addEventListener('orientationchange', onResize);
+        return () => {
+            window.removeEventListener('resize', onResize);
+            window.removeEventListener('orientationchange', onResize);
+        };
+    }, []);
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -93,6 +97,10 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
         }
     }, []);
 
+    const viewMobilePortfolio = useCallback(() => {
+        window.location.assign('/os/?mobile=1');
+    }, []);
+
     const getSpace = (sourceName: string) => {
         let spaces = '';
         for (let i = 0; i < 24 - sourceName.length; i++) spaces += '\xa0';
@@ -149,20 +157,20 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
                         <div style={styles.logoContainer}>
                             <div>
                                 <p style={styles.green}>
-                                    <b>Heffernan,</b>{' '}
+                                    <b>Mohamed,</b>{' '}
                                 </p>
                                 <p style={styles.green}>
-                                    <b>Henry Inc.</b>
+                                    <b>Islam Inc.</b>
                                 </p>
                             </div>
                         </div>
                         <div style={styles.headerInfo}>
-                            <p>Released: 01/13/2000</p>
-                            <p>HHBIOS (C)2000 Heffernan Henry Inc.,</p>
+                            <p>Released: 09/17/2026</p>
+                            <p>MIBIOS (C)2026 Mohamed Islam Inc.,</p>
                         </div>
                     </div>
                     <div style={styles.body} className="loading-screen-body">
-                        <p>HSP S13 2000-2022 Special UC131S</p>
+                        <p>HSP S13 2026 Special UC131S</p>
                         <div style={styles.spacer} />
                         {showBiosInfo && (
                             <>
@@ -195,7 +203,7 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
                             <p>
                                 All Content Loaded, launching{' '}
                                 <b style={styles.green}>
-                                    'Henry Heffernan Portfolio Showcase'
+                                    'Mohamed Islam Portfolio Showcase'
                                 </b>{' '}
                                 V1.0
                             </p>
@@ -220,44 +228,84 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
                     opacity: startPopupOpacity,
                 })}
             >
-                <div style={styles.startPopup}>
+                <div
+                    style={styles.startPopup}
+                    className={`start-popup${
+                        viewport.isMobile ? ' start-popup-mobile' : ''
+                    }`}
+                >
                     {/* <p style={styles.red}>
                         <b>THIS SITE IS CURRENTLY A W.I.P.</b>
                     </p>
                     <p>But do enjoy what I have done so far :)</p>
                     <div style={styles.spacer} />
                     <div style={styles.spacer} /> */}
-                    <p>Henry Heffernan Portfolio Showcase 2022</p>
-                    {mobileWarning && (
+                    <p className="start-popup-kicker">
+                        MOHAMED ISLAM · SOFTWARE ENGINEER
+                    </p>
+                    <h1 className="start-popup-title">Portfolio Showcase</h1>
+                    {viewport.isMobile && viewport.isPortrait && (
                         <>
-                            <br />
-                            <b>
-                                <p style={styles.warning}>
-                                    WARNING: This experience is best viewed on
-                                </p>
-                                <p style={styles.warning}>
-                                    a desktop or laptop computer.
-                                </p>
-                            </b>
-                            <br />
+                            <div className="orientation-card">
+                                <div className="phone-rotate" aria-hidden="true">
+                                    <span className="phone-shape" />
+                                    <span className="rotate-arrow">↻</span>
+                                </div>
+                                <div className="orientation-copy">
+                                    <p><b>Best in landscape</b></p>
+                                    <p>Rotate your phone for the full 3D desk, or open the mobile portfolio now.</p>
+                                </div>
+                            </div>
+                            <div className="start-popup-actions">
+                                <button
+                                    type="button"
+                                    className="bios-action bios-action-primary"
+                                    onClick={viewMobilePortfolio}
+                                >
+                                    VIEW MOBILE PORTFOLIO
+                                </button>
+                                <button
+                                    type="button"
+                                    className="bios-action bios-action-secondary"
+                                    onClick={start}
+                                >
+                                    LAUNCH 3D ANYWAY
+                                </button>
+                            </div>
                         </>
                     )}
-                    <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-                        <p>Click start to begin{'\xa0'}</p>
-                        <span className="blinking-cursor" />
-                    </div>
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            marginTop: '16px',
-                        }}
-                    >
-                        <div className="bios-start-button" onClick={start}>
-                            <p>START</p>
-                        </div>
-                    </div>
+                    {(!viewport.isMobile || !viewport.isPortrait) && (
+                        <>
+                            {viewport.isMobile && (
+                                <p className="landscape-ready">● LANDSCAPE MODE READY</p>
+                            )}
+                            <div className="start-prompt">
+                                <p>Everything is loaded. Choose how you want to explore.{`\xa0`}</p>
+                                <span className="blinking-cursor" />
+                            </div>
+                            <div className="start-popup-actions start-popup-actions-row">
+                                <button
+                                    type="button"
+                                    className="bios-action bios-action-primary"
+                                    onClick={start}
+                                >
+                                    START 3D EXPERIENCE
+                                </button>
+                                {viewport.isMobile && (
+                                    <button
+                                        type="button"
+                                        className="bios-action bios-action-secondary"
+                                        onClick={viewMobilePortfolio}
+                                    >
+                                        MOBILE PORTFOLIO
+                                    </button>
+                                )}
+                            </div>
+                        </>
+                    )}
+                    <p className="start-popup-footer">
+                        Showcase 2026 · Web, mobile and AI projects
+                    </p>
                 </div>
             </div>
             {webGLError && (

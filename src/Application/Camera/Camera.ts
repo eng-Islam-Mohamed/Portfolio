@@ -70,6 +70,9 @@ export default class Camera extends EventEmitter {
             event.preventDefault();
             // @ts-ignore
             if (event.target.id === 'prevent-click') return;
+            // Mobile uses explicit scene controls. A general tap should not
+            // send the camera back to the distant cinematic view.
+            if (this.isMobileViewport()) return;
             // print target and current keyframe
             if (
                 this.currentKeyframe === CameraKey.IDLE ||
@@ -138,14 +141,23 @@ export default class Camera extends EventEmitter {
         this.on('enterMonitor', () => {
             this.transition(
                 CameraKey.MONITOR,
-                2000,
+                this.isMobileViewport() ? 900 : 2000,
                 BezierEasing(0.13, 0.99, 0, 1)
             );
             UIEventBus.dispatch('enterMonitor', {});
         });
         this.on('leftMonitor', () => {
-            this.transition(CameraKey.DESK);
+            this.transition(
+                CameraKey.DESK,
+                this.isMobileViewport() ? 700 : 1000
+            );
             UIEventBus.dispatch('leftMonitor', {});
+        });
+        UIEventBus.on('mobileEnterMonitor', () => {
+            this.trigger('enterMonitor');
+        });
+        UIEventBus.on('mobileLeaveMonitor', () => {
+            this.trigger('leftMonitor');
         });
     }
 
@@ -183,8 +195,16 @@ export default class Camera extends EventEmitter {
 
     setPostLoadTransition() {
         UIEventBus.on('loadingScreenDone', () => {
-            this.transition(CameraKey.IDLE, 2500, TWEEN.Easing.Exponential.Out);
+            this.transition(
+                this.isMobileViewport() ? CameraKey.DESK : CameraKey.IDLE,
+                this.isMobileViewport() ? 1400 : 2500,
+                TWEEN.Easing.Exponential.Out
+            );
         });
+    }
+
+    isMobileViewport() {
+        return this.sizes.width < 900;
     }
 
     resize() {

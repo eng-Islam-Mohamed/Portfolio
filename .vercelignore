@@ -1,0 +1,8 @@
+.git/
+.vercel/
+.env
+node_modules/
+inner-site/node_modules/
+inner-site/dist/
+public/
+artifacts/

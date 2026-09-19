@@ -92,6 +92,19 @@ export class DeskKeyframe extends CameraKeyframeInstance {
     }
 
     update() {
+        if (this.sizes.width < 900) {
+            const portrait = this.sizes.height > this.sizes.width;
+            this.targetFoc.set(0, portrait ? 650 : 600, 0);
+            this.targetPos.set(
+                0,
+                portrait ? 1900 : 1650,
+                portrait ? 9800 : 5200
+            );
+            this.focalPoint.copy(this.targetFoc);
+            this.position.copy(this.targetPos);
+            return;
+        }
+
         this.targetFoc.x +=
             (this.mouse.x - this.sizes.width / 2 - this.targetFoc.x) * 0.05;
         this.targetFoc.y +=

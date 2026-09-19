@@ -2,5 +2,13 @@ node_modules
 package-lock.json
 .DS_Store
 *.psd
+.env
+.vercel/
+inner-site/.git-local-backup/
+inner-site/dist/
 
-public/
+/public/
+
+# Private reference checkouts and original captures used for local screenshot work.
+artifacts/sources/
+artifacts/original-vault-captures/

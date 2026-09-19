@@ -1,0 +1,16 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build",
+  "outputDirectory": "public",
+  "functions": {
+    "api/contact.js": {
+      "memory": 256,
+      "maxDuration": 10
+    }
+  },
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/os(?:/.*)?", "dest": "/os/index.html" },
+    { "src": "/.*", "dest": "/index.html" }
+  ]
+}

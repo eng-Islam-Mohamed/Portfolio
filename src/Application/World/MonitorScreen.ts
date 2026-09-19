@@ -148,6 +148,8 @@ export default class MonitorScreen extends EventEmitter {
         iframe.onload = () => {
             if (iframe.contentWindow) {
                 window.addEventListener('message', (event) => {
+                    if (event.origin !== window.location.origin || event.source !== iframe.contentWindow) return;
+                    if (!['mousemove', 'mousedown', 'mouseup', 'keydown', 'keyup'].includes(event.data?.type)) return;
                     var evt = new CustomEvent(event.data.type, {
                         bubbles: true,
                         cancelable: false,
@@ -182,20 +184,10 @@ export default class MonitorScreen extends EventEmitter {
             }
         };
 
-        // Set iframe attributes
-        // PROD
-        iframe.src = 'https://os.henryheffernan.com/';
-        /**
-         * Use dev server is query params are present
-         *
-         * Warning: This will not work unless the dev server is running on localhost:3000
-         * Also running the dev server causes browsers to freak out over unsecure connections
-         * in the iframe, so it will flag a ton of issues.
-         */
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has('dev')) {
-            iframe.src = 'http://localhost:3000/';
-        }
+        // The personalized desktop is hosted alongside the 3D room.
+        // Keep the retro desktop inside the physical monitor. Mobile visitors
+        // can open the responsive version with the full-screen control.
+        iframe.src = '/os/?embedded=1';
         iframe.style.width = this.screenSize.width + 'px';
         iframe.style.height = this.screenSize.height + 'px';
         iframe.style.padding = IFRAME_PADDING + 'px';
@@ -204,7 +196,7 @@ export default class MonitorScreen extends EventEmitter {
         iframe.className = 'jitter';
         iframe.id = 'computer-screen';
         iframe.frameBorder = '0';
-        iframe.title = 'HeffernanOS';
+        iframe.title = 'IslamOS — Mohamed Islam portfolio';
 
         // Add iframe to container
         container.appendChild(iframe);

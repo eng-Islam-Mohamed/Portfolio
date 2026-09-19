@@ -8,6 +8,7 @@ const HELP_TEXT = 'Click anywhere to begin';
 type HelpPromptProps = {};
 
 const HelpPrompt: React.FC<HelpPromptProps> = () => {
+    const isMobile = window.innerWidth < 900;
     const [helpText, setHelpText] = useState('');
     const [visible, setVisible] = useState(true);
     const visRef = useRef(visible);
@@ -46,6 +47,8 @@ const HelpPrompt: React.FC<HelpPromptProps> = () => {
         }
         visRef.current = visible;
     }, [visible]);
+
+    if (isMobile) return <></>;
 
     return helpText.length > 0 ? (
         <motion.div

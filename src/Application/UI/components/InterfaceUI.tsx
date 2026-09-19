@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import UIEventBus from '../EventBus';
 import InfoOverlay from './InfoOverlay';
+import MobileSceneControls from './MobileSceneControls';
 
 interface InterfaceUIProps {}
 
@@ -43,7 +44,8 @@ const InterfaceUI: React.FC<InterfaceUIProps> = ({}) => {
             setVisible(false);
             setInitLoad(false);
             if (interfaceRef.current) {
-                interfaceRef.current.style.pointerEvents = 'none';
+                interfaceRef.current.style.pointerEvents =
+                    window.innerWidth < 900 ? 'auto' : 'none';
             }
         });
         UIEventBus.on('leftMonitor', () => {
@@ -55,16 +57,19 @@ const InterfaceUI: React.FC<InterfaceUIProps> = ({}) => {
     }, []);
 
     return !loading ? (
-        <motion.div
-            initial="hide"
-            variants={vars}
-            animate={visible ? 'visible' : 'hide'}
-            style={styles.wrapper}
-            className="interface-wrapper"
-            id="prevent-click"
-        >
-            <InfoOverlay visible={visible} />
-        </motion.div>
+        <>
+            <motion.div
+                initial="hide"
+                variants={vars}
+                animate={visible ? 'visible' : 'hide'}
+                style={styles.wrapper}
+                className="interface-wrapper"
+                id="prevent-click"
+            >
+                <InfoOverlay visible={visible} />
+            </motion.div>
+            <MobileSceneControls />
+        </>
     ) : (
         <></>
     );
