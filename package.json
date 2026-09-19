@@ -3,7 +3,6 @@
   "license": "MIT",
   "scripts": {
     "install:all": "npm install && npm --prefix inner-site install",
-    "postinstall": "npm --prefix inner-site install",
     "build:room": "webpack --config ./bundler/webpack.prod.js --stats errors-warnings",
     "build:desktop": "npm --prefix inner-site run build",
     "build": "npm run build:room && npm run build:desktop && node scripts/copy-inner.cjs",

@@ -1,5 +1,5 @@
 node_modules
-package-lock.json
+/package-lock.json
 .DS_Store
 *.psd
 .env
@@ -12,3 +12,5 @@ inner-site/dist/
 # Private reference checkouts and original captures used for local screenshot work.
 artifacts/sources/
 artifacts/original-vault-captures/
+
+.vercel
