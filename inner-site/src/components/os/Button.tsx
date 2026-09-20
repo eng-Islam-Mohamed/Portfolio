@@ -7,9 +7,11 @@ export interface ButtonProps {
     icon?: IconName;
     text?: string;
     onClick?: () => void;
+    className?: string;
+    ariaLabel?: string;
 }
 
-const Button: React.FC<ButtonProps> = ({ icon, text, onClick }) => {
+const Button: React.FC<ButtonProps> = ({ icon, text, onClick, className, ariaLabel }) => {
     const [isHovering, setIsHovering] = useState(false);
 
     const handleMouseEnter = () => {
@@ -40,6 +42,9 @@ const Button: React.FC<ButtonProps> = ({ icon, text, onClick }) => {
 
     return (
         <div
+            className={className}
+            aria-label={ariaLabel}
+            role="button"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             style={outerBorderStyle}

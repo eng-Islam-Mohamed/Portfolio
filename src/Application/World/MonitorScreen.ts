@@ -207,7 +207,9 @@ export default class MonitorScreen extends EventEmitter {
         // The personalized desktop is hosted alongside the 3D room.
         // Keep the retro desktop inside the physical monitor. Mobile visitors
         // can open the responsive version with the full-screen control.
-        iframe.src = '/os/?embedded=1';
+        iframe.src = isMobileExperience()
+            ? '/os/?embedded=1&touch=1'
+            : '/os/?embedded=1';
         iframe.style.width = this.screenSize.width + 'px';
         iframe.style.height = this.screenSize.height + 'px';
         iframe.style.padding = IFRAME_PADDING + 'px';

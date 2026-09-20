@@ -419,12 +419,13 @@ html.force-landscape .mobile-scene-actions {
 
     .mobile-touch-rail {
         position: absolute;
-        left: max(8px, env(safe-area-inset-left));
-        top: 50%;
+        left: auto;
+        right: max(8px, env(safe-area-inset-right));
+        top: max(72px, env(safe-area-inset-top));
         bottom: auto;
         width: 54px;
-        height: min(285px, calc(100vh - 180px));
-        transform: translateY(-50%);
+        height: min(330px, calc(100vh - 160px));
+        transform: none;
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
@@ -435,6 +436,34 @@ html.force-landscape .mobile-scene-actions {
         border: 2px solid #fff;
         box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.24);
         pointer-events: auto;
+    }
+
+    .mobile-touch-rail.is-collapsed {
+        width: 44px;
+        height: 44px;
+        padding: 3px;
+        border-color: #67ff8a;
+        background: rgba(0, 0, 0, 0.8);
+    }
+
+    .mobile-touch-menu {
+        position: relative;
+        flex: 0 0 38px;
+        min-height: 38px;
+        color: #67ff8a;
+        background: #050805;
+        border: 1px solid #67ff8a;
+        touch-action: manipulation;
+    }
+
+    .mobile-touch-menu span {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%) rotate(90deg);
+        font: 700 13px monospace;
+        white-space: nowrap;
+        pointer-events: none;
     }
 
     .mobile-touch-status {
@@ -504,14 +533,23 @@ html.force-landscape .mobile-scene-actions {
 
 @media only screen and (orientation: landscape) and (max-height: 899px) {
     .mobile-touch-rail {
-        left: max(10px, env(safe-area-inset-left));
-        top: auto;
-        right: auto;
-        bottom: max(10px, env(safe-area-inset-bottom));
-        width: min(330px, calc(100vw - 20px));
+        left: auto;
+        top: max(10px, env(safe-area-inset-top));
+        right: max(10px, env(safe-area-inset-right));
+        bottom: auto;
+        width: min(300px, calc(100vw - 20px));
         height: 54px;
         transform: none;
         flex-direction: row;
+    }
+
+    .mobile-touch-rail.is-collapsed {
+        width: 44px;
+        height: 44px;
+    }
+
+    .mobile-touch-menu span {
+        transform: translate(-50%, -50%);
     }
 
     .mobile-touch-status {

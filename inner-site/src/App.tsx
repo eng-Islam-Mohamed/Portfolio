@@ -7,6 +7,7 @@ function App() {
     const query = new URLSearchParams(window.location.search);
     const queryRequestsMobile = query.get('mobile') === '1';
     const isEmbeddedDesktop = query.get('embedded') === '1';
+    const isTouchDesktop = query.get('touch') === '1';
 
     if (queryRequestsMobile) {
         sessionStorage.setItem('portfolio-mobile-mode', '1');
@@ -29,7 +30,7 @@ function App() {
     }, []);
 
     return (
-        <div className="App">
+        <div className={`App${isTouchDesktop ? ' touch-desktop' : ''}`}>
             {isEmbeddedDesktop ? (
                 <Desktop />
             ) : isMobilePortfolio ? (

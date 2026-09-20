@@ -31,7 +31,23 @@ export default function DosPlayer(props: PlayerProps) {
         }
 
         return () => {
-            instance.stop();
+            const commandInterface = instance.ciPromise;
+            if (commandInterface) {
+                commandInterface
+                    .then((ci: any) => {
+                        ci.mute && ci.mute();
+                        ci.exit && ci.exit();
+                    })
+                    .catch(() => {});
+            }
+            instance.stop().catch(() => {});
+            root.querySelectorAll('audio, video').forEach((media) => {
+                const element = media as HTMLMediaElement;
+                element.pause();
+                element.muted = true;
+                element.src = '';
+            });
+            root.replaceChildren();
         };
     }, [rootRef]);
 

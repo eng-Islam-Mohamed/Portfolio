@@ -203,11 +203,14 @@ const Window: React.FC<WindowProps> = (props) => {
                 <div style={styles.windowBorderOuter}>
                     <div style={styles.windowBorderInner}>
                         <div
+                            className="window-drag-hitbox"
                             style={styles.dragHitbox}
                             onMouseDown={startDrag}
                         ></div>
                         <div
-                            className={props.rainbow ? 'rainbow-wrapper' : ''}
+                            className={`${
+                                props.rainbow ? 'rainbow-wrapper ' : ''
+                            }window-top-bar`}
                             style={Object.assign(
                                 {},
                                 styles.topBar,
@@ -246,12 +249,21 @@ const Window: React.FC<WindowProps> = (props) => {
                             </div>
                             <div style={styles.windowTopButtons}>
                                 <Button
+                                    className="window-control-button"
+                                    ariaLabel="Minimize window"
                                     icon="minimize"
                                     onClick={props.minimizeWindow}
                                 />
-                                <Button icon="maximize" onClick={maximize} />
+                                <Button
+                                    className="window-control-button"
+                                    ariaLabel="Maximize window"
+                                    icon="maximize"
+                                    onClick={maximize}
+                                />
                                 <div style={{ paddingLeft: 2 }}>
                                     <Button
+                                        className="window-control-button window-close-button"
+                                        ariaLabel="Close window"
                                         icon="close"
                                         onClick={props.closeWindow}
                                     />

@@ -23,6 +23,33 @@ div {
     height: 100%;
 }
 
+.touch-desktop .window-top-bar {
+    height: 46px !important;
+}
+
+.touch-desktop .window-drag-hitbox {
+    width: calc(100% - 150px) !important;
+    height: 54px !important;
+}
+
+.touch-desktop .window-control-button {
+    width: 42px !important;
+    height: 38px !important;
+    box-sizing: border-box;
+    align-items: stretch;
+}
+
+.touch-desktop .window-control-button > div {
+    width: 36px !important;
+    height: 32px !important;
+    align-items: center;
+    justify-content: center;
+}
+
+.touch-desktop .window-close-button {
+    margin-left: 2px;
+}
+
 .white {
     color: #fff;
 }

@@ -119,14 +119,11 @@ const Desktop: React.FC<DesktopProps> = (props) => {
     }, []);
 
     const removeWindow = useCallback((key: string) => {
-        // Absolute hack and a half
-        setTimeout(() => {
-            setWindows((prevWindows) => {
-                const newWindows = { ...prevWindows };
-                delete newWindows[key];
-                return newWindows;
-            });
-        }, 100);
+        setWindows((prevWindows) => {
+            const newWindows = { ...prevWindows };
+            delete newWindows[key];
+            return newWindows;
+        });
     }, []);
 
     const minimizeWindow = useCallback((key: string) => {

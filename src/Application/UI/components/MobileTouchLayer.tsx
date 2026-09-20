@@ -8,6 +8,7 @@ const MobileTouchLayer: React.FC = () => {
     const [mobile, setMobile] = useState(getExperienceViewport().isMobile);
     const [mode, setMode] = useState<SceneMode>('desk');
     const [muted, setMuted] = useState(false);
+    const [controlsOpen, setControlsOpen] = useState(true);
     const dragging = useRef(false);
     const moved = useRef(false);
     const start = useRef({ x: 0, y: 0 });
@@ -22,8 +23,14 @@ const MobileTouchLayer: React.FC = () => {
 
     useEffect(() => {
         const resize = () => setMobile(getExperienceViewport().isMobile);
-        const enter = () => setMode('monitor');
-        const leave = () => setMode('desk');
+        const enter = () => {
+            setMode('monitor');
+            setControlsOpen(false);
+        };
+        const leave = () => {
+            setMode('desk');
+            setControlsOpen(true);
+        };
 
         window.addEventListener('resize', resize);
         window.addEventListener('orientationchange', resize);
@@ -177,14 +184,22 @@ const MobileTouchLayer: React.FC = () => {
             pinchStartDistance.current = pointerDistance();
             pinchHandled.current = false;
             moved.current = true;
+            if (mode === 'monitor' && computerTarget.current) {
+                dispatchComputerEvent(
+                    'up',
+                    event.clientX,
+                    event.clientY,
+                    false
+                );
+            }
         }
         dragging.current = true;
-        moved.current = false;
+        if (activePointers.current.size === 1) moved.current = false;
         start.current = { x: event.clientX, y: event.clientY };
         event.currentTarget.setPointerCapture(event.pointerId);
         sendPosition(event);
         UIEventBus.dispatch('unlockAudio', {});
-        if (mode === 'monitor') {
+        if (mode === 'monitor' && activePointers.current.size === 1) {
             const point = getComputerPoint(event.clientX, event.clientY);
             lastComputerY.current = point?.y ?? null;
             dispatchComputerEvent('down', event.clientX, event.clientY);
@@ -198,14 +213,24 @@ const MobileTouchLayer: React.FC = () => {
             y: event.clientY,
         });
         if (
-            mode === 'desk' &&
             activePointers.current.size >= 2 &&
             pinchStartDistance.current > 0
         ) {
             const scale = pointerDistance() / pinchStartDistance.current;
-            if (scale > 1.15 && !pinchHandled.current) {
-                pinchHandled.current = true;
-                zoomToComputer();
+            if (!pinchHandled.current) {
+                if (mode === 'desk' && scale > 1.15) {
+                    pinchHandled.current = true;
+                    zoomToComputer();
+                } else if (mode === 'monitor' && scale < 0.85) {
+                    pinchHandled.current = true;
+                    dispatchComputerEvent(
+                        'up',
+                        event.clientX,
+                        event.clientY,
+                        false
+                    );
+                    backToDesk();
+                }
             }
             return;
         }
@@ -277,11 +302,13 @@ const MobileTouchLayer: React.FC = () => {
 
     const zoomToComputer = () => {
         setMode('monitor');
+        setControlsOpen(false);
         UIEventBus.dispatch('mobileEnterMonitor', {});
     };
 
     const backToDesk = () => {
         setMode('desk');
+        setControlsOpen(true);
         UIEventBus.dispatch('mobileLeaveMonitor', {});
     };
 
@@ -305,29 +332,40 @@ const MobileTouchLayer: React.FC = () => {
                 lastComputerY.current = null;
             }}
         >
-            <div className="mobile-touch-rail">
-                <div className="mobile-touch-status">
-                    <strong>{mode === 'monitor' ? 'PC' : 'DESK'}</strong>
-                    <span>
-                        {mode === 'monitor'
-                            ? 'Swipe to scroll'
-                            : 'Drag · pinch · double tap'}
-                    </span>
-                </div>
-                <div className="mobile-touch-actions">
-                    {mode === 'desk' ? (
-                        <button aria-label="Zoom to computer" type="button" onPointerUp={action(zoomToComputer)}>
-                            <span>ZOOM</span>
-                        </button>
-                    ) : (
-                        <button aria-label="Back to desk" type="button" onPointerUp={action(backToDesk)}>
-                            <span>BACK</span>
-                        </button>
-                    )}
-                    <button aria-label={muted ? 'Turn sound on' : 'Turn sound off'} type="button" onPointerUp={action(toggleSound)}>
-                        <span>{muted ? 'MUTED' : 'SOUND'}</span>
-                    </button>
-                </div>
+            <div
+                className={`mobile-touch-rail ${
+                    controlsOpen ? 'is-open' : 'is-collapsed'
+                }`}
+            >
+                <button
+                    aria-label={controlsOpen ? 'Hide controls' : 'Show controls'}
+                    className="mobile-touch-menu"
+                    type="button"
+                    onPointerUp={action(() => setControlsOpen(!controlsOpen))}
+                >
+                    <span>{controlsOpen ? '×' : '•••'}</span>
+                </button>
+                {controlsOpen && (
+                    <>
+                        <div className="mobile-touch-status">
+                            <strong>{mode === 'monitor' ? 'PC' : 'DESK'}</strong>
+                        </div>
+                        <div className="mobile-touch-actions">
+                            {mode === 'desk' ? (
+                                <button aria-label="Zoom to computer" type="button" onPointerUp={action(zoomToComputer)}>
+                                    <span>ZOOM</span>
+                                </button>
+                            ) : (
+                                <button aria-label="Back to desk" type="button" onPointerUp={action(backToDesk)}>
+                                    <span>BACK</span>
+                                </button>
+                            )}
+                            <button aria-label={muted ? 'Turn sound on' : 'Turn sound off'} type="button" onPointerUp={action(toggleSound)}>
+                                <span>{muted ? 'MUTED' : 'SOUND'}</span>
+                            </button>
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );
