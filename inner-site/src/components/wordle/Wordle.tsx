@@ -1,7 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { motion, useAnimation } from 'framer-motion';
-import WORDS from './Words';
 import { Easing } from '../general/Animation';
+
+type LetterState = 'correct' | 'present' | 'absent';
+
+const getGuessStates = (word: string, guess: string): LetterState[] => {
+    const states: LetterState[] = Array(word.length).fill('absent');
+    const remaining = word.split('');
+
+    guess.split('').forEach((letter, index) => {
+        if (letter === word[index]) {
+            states[index] = 'correct';
+            remaining[index] = '';
+        }
+    });
+
+    guess.split('').forEach((letter, index) => {
+        if (states[index] === 'correct') return;
+        const match = remaining.indexOf(letter);
+        if (match !== -1) {
+            states[index] = 'present';
+            remaining[match] = '';
+        }
+    });
+
+    return states;
+};
+
+const isAcceptedGuess = (guess: string, word: string) =>
+    guess.length === word.length && /^[A-Z]+$/.test(guess);
 
 export interface KeyboardLetterProps {
     letter: string;
@@ -28,7 +55,12 @@ const KeyboardLetter: React.FC<KeyboardLetterProps> = ({
         guesses.forEach((guess) => {
             if (word.includes(letter) && guess.includes(letter)) {
                 setIsInWord(true);
-                if (word.indexOf(letter) === guess.indexOf(letter)) {
+                if (
+                    guess.split('').some(
+                        (guessLetter, index) =>
+                            guessLetter === letter && word[index] === letter
+                    )
+                ) {
                     setIsInPlace(true);
                 }
             }
@@ -46,7 +78,7 @@ const KeyboardLetter: React.FC<KeyboardLetterProps> = ({
     const handleClick = () => {
         if (letter === 'RET') {
             if (currentGuess.length === word.length) {
-                if (WORDS.includes(currentGuess.toLowerCase())) {
+                if (isAcceptedGuess(currentGuess, word)) {
                     setGuesses([...guesses, currentGuess]);
                     setCurrentGuess('');
                 }
@@ -80,6 +112,7 @@ export interface GuessLetterProps {
     word: string;
     guess: string;
     guessed: boolean;
+    index: number;
 }
 
 const GuessLetter: React.FC<GuessLetterProps> = ({
@@ -87,20 +120,9 @@ const GuessLetter: React.FC<GuessLetterProps> = ({
     letter,
     guess,
     word,
+    index,
 }) => {
-    const [isInWord, setIsInWord] = useState(false);
-    const [isInPlace, setIsInPlace] = useState(false);
-
-    useEffect(() => {
-        if (guessed) {
-            if (word.includes(letter)) {
-                setIsInWord(true);
-                if (word.indexOf(letter) === guess.indexOf(letter)) {
-                    setIsInPlace(true);
-                }
-            }
-        }
-    }, [guessed, guess, letter, word]);
+    const state = guessed ? getGuessStates(word, guess)[index] : undefined;
 
     return (
         <div
@@ -108,8 +130,9 @@ const GuessLetter: React.FC<GuessLetterProps> = ({
             style={Object.assign(
                 {},
                 styles.guessLetterBox,
-                isInWord && { backgroundColor: 'yellow' },
-                isInPlace && { backgroundColor: 'lightgreen' },
+                state === 'present' && { backgroundColor: 'yellow' },
+                state === 'correct' && { backgroundColor: 'lightgreen' },
+                state === 'absent' && { backgroundColor: 'gray' },
                 !guessed && { backgroundColor: 'white' },
                 letter === ' ' && styles.emptyBox
             )}
@@ -144,7 +167,7 @@ const GuessWord: React.FC<GuessWordProps> = ({
             setSavedGuess(guess);
             if (
                 guess.length === word.length &&
-                !WORDS.includes(guess.toLowerCase())
+                !isAcceptedGuess(guess, word)
             ) {
                 controls
                     .start({
@@ -190,6 +213,7 @@ const GuessWord: React.FC<GuessWordProps> = ({
                     letter={letter}
                     guess={savedGuess}
                     word={word}
+                    index={index}
                 />
             ))}
             {[...Array(word.length - savedGuess.length)].map((e, i) => (
@@ -199,6 +223,7 @@ const GuessWord: React.FC<GuessWordProps> = ({
                     letter={' '}
                     guess={savedGuess}
                     word={word}
+                    index={savedGuess.length + i}
                 />
             ))}
         </motion.div>
@@ -214,7 +239,7 @@ const ROWS = [TOP_ROW, MIDDLE_ROW, BOTTOM_ROW];
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 const Wordle: React.FC<WordleProps> = () => {
-    const word = 'ISLAM';
+    const word = 'QUANTUM';
     const [guesses, setGuesses] = useState<string[]>([]);
     const [gameOver, setGameOver] = useState(false);
     const [won, setWon] = useState(false);
@@ -236,7 +261,7 @@ const Wordle: React.FC<WordleProps> = () => {
                 setCurrentGuess(currentGuess.slice(0, -1));
             } else if (event.key === 'Enter') {
                 if (currentGuess.length === word.length) {
-                    if (WORDS.includes(currentGuess.toLowerCase())) {
+                    if (isAcceptedGuess(currentGuess, word)) {
                         setGuesses([...guesses, currentGuess]);
                         setCurrentGuess('');
                     }
@@ -273,8 +298,8 @@ const Wordle: React.FC<WordleProps> = () => {
     return (
         <div style={styles.container}>
             <div style={styles.header}>
-                <h2>Islamle</h2>
-                <p>Wordle but with a ISLAM based twist.</p>
+                <h2>Quantumle</h2>
+                <p>Guess the seven-letter keyword behind Quantum Tutor.</p>
             </div>
             <motion.div
                 variants={gameOverAnimations}
@@ -287,7 +312,7 @@ const Wordle: React.FC<WordleProps> = () => {
                 )}
             >
                 <h2>{won ? 'You win!' : 'Game Over'}</h2>
-                <p>Thanks for playing! Remember: the word is always "ISLAM"!</p>
+                <p>Thanks for playing! The answer is "QUANTUM".</p>
                 <br />
                 <GuessWord
                     key={'winning-guess'}

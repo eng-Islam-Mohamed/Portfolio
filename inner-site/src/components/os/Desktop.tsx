@@ -56,7 +56,7 @@ const APPLICATIONS: {
     },
     henordle: {
         key: 'henordle',
-        name: 'Islamle',
+        name: 'Quantumle',
         shortcutIcon: 'henordleIcon',
         component: Henordle,
     },

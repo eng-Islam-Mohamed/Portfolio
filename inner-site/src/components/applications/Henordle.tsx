@@ -12,7 +12,7 @@ const IslamleApp: React.FC<IslamleAppProps> = (props) => {
             width={600}
             height={860}
             windowBarIcon="windowGameIcon"
-            windowTitle="Islamle"
+            windowTitle="Quantumle"
             closeWindow={props.onClose}
             onInteract={props.onInteract}
             minimizeWindow={props.onMinimize}
