@@ -398,6 +398,158 @@ html.force-landscape .mobile-scene-actions {
     }
 }
 
+/* This controller stays in the phone's real coordinate system. The 3D room
+   can be rotated visually without rotating the elements that receive touch. */
+.mobile-touch-layer {
+    display: none;
+}
+
+@media only screen and (max-width: 899px),
+    only screen and (pointer: coarse) and (max-height: 899px) {
+    .mobile-touch-layer {
+        position: fixed;
+        inset: 0;
+        display: block;
+        pointer-events: auto;
+        touch-action: none;
+        overscroll-behavior: none;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+
+    .mobile-touch-rail {
+        position: absolute;
+        left: max(8px, env(safe-area-inset-left));
+        top: max(72px, env(safe-area-inset-top));
+        bottom: max(72px, env(safe-area-inset-bottom));
+        width: 82px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        padding: 7px;
+        color: #fff;
+        background: rgba(0, 0, 0, 0.92);
+        border: 3px solid #fff;
+        box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.28);
+    }
+
+    .mobile-touch-status {
+        min-height: 190px;
+        flex: 1;
+        position: relative;
+        overflow: hidden;
+        border-bottom: 1px solid #555;
+    }
+
+    .mobile-touch-status strong,
+    .mobile-touch-status span,
+    .mobile-touch-actions button span {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        display: block;
+        white-space: nowrap;
+        transform: translate(-50%, -50%) rotate(90deg);
+        font-family: monospace;
+    }
+
+    .mobile-touch-status strong {
+        top: 29%;
+        color: #67ff8a;
+        font-size: 13px;
+        letter-spacing: 0.7px;
+    }
+
+    .mobile-touch-status span {
+        top: 66%;
+        color: #ddd;
+        font-size: 10px;
+    }
+
+    .mobile-touch-actions {
+        min-height: 430px;
+        flex: 2;
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    .mobile-touch-actions button {
+        position: relative;
+        flex: 1;
+        min-height: 92px;
+        color: #000;
+        background: #fff;
+        border: 2px solid #fff;
+        border-radius: 0;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .mobile-touch-actions button span {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        pointer-events: none;
+    }
+
+    .mobile-touch-actions .mobile-touch-primary {
+        color: #fff;
+        background: #0d2012;
+        border-color: #67ff8a;
+    }
+
+    .mobile-touch-actions button:active {
+        color: #000;
+        background: #67ff8a;
+        border-color: #67ff8a;
+    }
+}
+
+@media only screen and (orientation: landscape) and (max-height: 899px) {
+    .mobile-touch-rail {
+        left: max(10px, env(safe-area-inset-left));
+        top: auto;
+        right: auto;
+        bottom: max(10px, env(safe-area-inset-bottom));
+        width: min(720px, calc(100vw - 20px));
+        height: 78px;
+        flex-direction: row;
+    }
+
+    .mobile-touch-status {
+        min-height: 0;
+        min-width: 190px;
+        border-right: 1px solid #555;
+        border-bottom: 0;
+    }
+
+    .mobile-touch-status strong,
+    .mobile-touch-status span,
+    .mobile-touch-actions button span {
+        transform: translate(-50%, -50%);
+    }
+
+    .mobile-touch-status strong {
+        top: 35%;
+    }
+
+    .mobile-touch-status span {
+        top: 68%;
+    }
+
+    .mobile-touch-actions {
+        min-height: 0;
+        flex-direction: row;
+    }
+
+    .mobile-touch-actions button {
+        min-height: 0;
+        min-width: 130px;
+    }
+}
+
 .mobile-scene-controls {
     display: none;
 }

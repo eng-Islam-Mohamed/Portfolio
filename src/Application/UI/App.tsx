@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import LoadingScreen from './components/LoadingScreen';
 import HelpPrompt from './components/HelpPrompt';
 import InterfaceUI from './components/InterfaceUI';
+import MobileTouchLayer from './components/MobileTouchLayer';
 import eventBus from './EventBus';
 import './style.css';
 
@@ -29,6 +30,10 @@ const createUI = () => {
 
 const createVolumeUI = () => {
     ReactDOM.render(<InterfaceUI />, document.getElementById('ui-interactive'));
+    ReactDOM.render(
+        <MobileTouchLayer />,
+        document.getElementById('mobile-touch-root')
+    );
 };
 
 export { createUI, createVolumeUI };

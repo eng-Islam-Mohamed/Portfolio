@@ -6,17 +6,23 @@
 html,
 body {
     overflow: hidden;
+    width: 100%;
+    height: 100%;
 }
 
-html.force-landscape body {
+#experience-root {
     position: fixed;
+    inset: 0;
+    overflow: hidden;
+}
+
+html.force-landscape #experience-root {
     top: 0;
     left: var(--screen-width);
     width: var(--experience-width);
     height: var(--experience-height);
     transform: rotate(90deg);
     transform-origin: top left;
-    touch-action: none;
 }
 
 html.force-landscape #css,
@@ -31,6 +37,13 @@ html.force-landscape #ui-interactive {
 html.force-landscape button,
 html.force-landscape a {
     touch-action: manipulation;
+}
+
+#mobile-touch-root {
+    position: fixed;
+    inset: 0;
+    z-index: 2147483647;
+    pointer-events: none;
 }
 
 .webgl {

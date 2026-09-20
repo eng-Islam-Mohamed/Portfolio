@@ -1,6 +1,5 @@
 import AudioManager from './AudioManager';
 import * as THREE from 'three';
-import UIEventBus from '../UI/EventBus';
 import { Vector3 } from 'three';
 
 export class AudioSource {
@@ -38,6 +37,14 @@ export class ComputerAudio extends AudioSource {
             }
         });
 
+        document.addEventListener('pointerup', (event) => {
+            if (event.pointerType !== 'touch') return;
+            this.manager.playAudio('mouseUp', {
+                volume: 0.35,
+                position: new THREE.Vector3(800, -300, 1200),
+            });
+        });
+
         document.addEventListener('keyup', (event) => {
             // @ts-ignore
             if (event.inComputer) {
@@ -70,23 +77,28 @@ export class ComputerAudio extends AudioSource {
 
 export class AmbienceAudio extends AudioSource {
     poolKey: string;
+    started: boolean;
 
     constructor(manager: AudioManager) {
         super(manager);
-        UIEventBus.on('loadingScreenDone', () => {
-            this.poolKey = this.manager.playAudio('office', {
-                volume: 1,
-                loop: true,
-                randDetuneScale: 0,
-                filter: {
-                    type: 'lowpass',
-                    frequency: 1000,
-                },
-            });
-            this.manager.playAudio('startup', {
-                volume: 0.4,
-                randDetuneScale: 0,
-            });
+        this.started = false;
+    }
+
+    start() {
+        if (this.started) return;
+        this.started = true;
+        this.poolKey = this.manager.playAudio('office', {
+            volume: 1,
+            loop: true,
+            randDetuneScale: 0,
+            filter: {
+                type: 'lowpass',
+                frequency: 1000,
+            },
+        });
+        this.manager.playAudio('startup', {
+            volume: 0.4,
+            randDetuneScale: 0,
         });
     }
 

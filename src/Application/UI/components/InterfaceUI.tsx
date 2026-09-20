@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import UIEventBus from '../EventBus';
 import InfoOverlay from './InfoOverlay';
-import MobileSceneControls from './MobileSceneControls';
 import { isMobileExperience } from '../../Utils/Viewport';
 
 interface InterfaceUIProps {}
@@ -69,7 +68,6 @@ const InterfaceUI: React.FC<InterfaceUIProps> = ({}) => {
             >
                 <InfoOverlay visible={visible} />
             </motion.div>
-            <MobileSceneControls />
         </>
     ) : (
         <></>

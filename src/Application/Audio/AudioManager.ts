@@ -16,6 +16,8 @@ export default class Audio {
         ambience: AmbienceAudio;
     };
     scene: THREE.Scene;
+    sceneReady: boolean;
+    audioUnlocked: boolean;
 
     constructor() {
         this.application = new Application();
@@ -24,6 +26,9 @@ export default class Audio {
         this.loadedAudio = this.application.resources.items.audio;
         this.scene = this.application.scene;
         this.audioPool = {};
+        this.sceneReady = false;
+        this.audioUnlocked = false;
+        this.context = this.listener.context;
 
         this.audioSources = {
             computer: new ComputerAudio(this),
@@ -31,18 +36,40 @@ export default class Audio {
         };
 
         UIEventBus.on('loadingScreenDone', () => {
-            setTimeout(() => {
-                const AudioContext =
-                    // @ts-ignore
-                    window.AudioContext || window.webkitAudioContext;
-                this.context = new AudioContext();
-                this.context.resume();
-            }, 100);
+            this.sceneReady = true;
+            this.startAmbienceWhenReady();
+        });
+
+        const unlock = () => this.unlockAudio();
+        UIEventBus.on('unlockAudio', unlock);
+        document.addEventListener('pointerdown', unlock, {
+            capture: true,
+            passive: true,
+        });
+        document.addEventListener('touchend', unlock, {
+            capture: true,
+            passive: true,
         });
 
         UIEventBus.on('muteToggle', (mute: boolean) => {
             this.listener.setMasterVolume(mute ? 0 : 1);
         });
+    }
+
+    unlockAudio() {
+        if (this.audioUnlocked && this.context.state === 'running') return;
+
+        this.audioUnlocked = true;
+        const resume = this.context.resume();
+        this.startAmbienceWhenReady();
+        if (resume) {
+            resume.then(() => this.startAmbienceWhenReady()).catch(() => {});
+        }
+    }
+
+    startAmbienceWhenReady() {
+        if (!this.sceneReady || !this.audioUnlocked) return;
+        this.audioSources.ambience.start();
     }
 
     playAudio(
@@ -61,7 +88,9 @@ export default class Audio {
         } = {}
     ) {
         // Resume context if it's suspended
-        if (this.context) this.context.resume();
+        if (this.context && this.context.state === 'suspended') {
+            this.context.resume().catch(() => {});
+        }
 
         // Get the audio source
         sourceName = this.getRandomVariant(sourceName);

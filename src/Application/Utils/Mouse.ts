@@ -5,6 +5,7 @@ import {
     getExperienceViewport,
     isMobileExperience,
 } from './Viewport';
+import UIEventBus from '../UI/EventBus';
 export default class Mouse extends EventEmitter {
     x: number;
     y: number;
@@ -42,6 +43,19 @@ export default class Mouse extends EventEmitter {
             this.x = point.x;
             this.y = point.y;
         };
+
+        UIEventBus.on(
+            'mobileTouchMove',
+            (point: { clientX: number; clientY: number }) => {
+                const mapped = clientPointToExperience(
+                    point.clientX,
+                    point.clientY
+                );
+                this.x = mapped.x;
+                this.y = mapped.y;
+                this.touchActive = true;
+            }
+        );
 
         document.addEventListener(
             'pointerdown',
