@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import eventBus from '../EventBus';
+import { isMobileExperience } from '../../Utils/Viewport';
 
 type LoadingProps = {};
 
@@ -17,60 +18,8 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
     const [showLoadingResources, setShowLoadingResources] = useState(false);
     const [doneLoading, setDoneLoading] = useState(false);
     const [webGLError, setWebGLError] = useState(false);
-    const [landscapeMessage, setLandscapeMessage] = useState('');
     const [counter, setCounter] = useState(0);
     const [resources] = useState<string[]>([]);
-    const getViewport = () => {
-        const isTouchDevice =
-            navigator.maxTouchPoints > 0 ||
-            window.matchMedia('(pointer: coarse)').matches;
-
-        return {
-            // Large iPhones can be wider than 900px in landscape. Keep them in
-            // mobile mode by also considering touch capability and the short edge.
-            isMobile:
-                window.innerWidth < 900 ||
-                (isTouchDevice &&
-                    Math.min(window.innerWidth, window.innerHeight) < 900),
-            isPortrait: window.matchMedia('(orientation: portrait)').matches,
-        };
-    };
-    const [viewport, setViewport] = useState(getViewport);
-    const orientationTimers = useRef<number[]>([]);
-
-    useEffect(() => {
-        const refreshViewport = () => setViewport(getViewport());
-        const onOrientationChange = () => {
-            refreshViewport();
-
-            // Mobile Safari can fire orientationchange before the viewport
-            // dimensions have settled, so check it again after the rotation.
-            orientationTimers.current.forEach(window.clearTimeout);
-            orientationTimers.current = [100, 300].map((delay) =>
-                window.setTimeout(refreshViewport, delay)
-            );
-        };
-
-        const orientationQuery = window.matchMedia('(orientation: portrait)');
-
-        window.addEventListener('resize', refreshViewport);
-        window.addEventListener('orientationchange', onOrientationChange);
-        if (orientationQuery.addEventListener) {
-            orientationQuery.addEventListener('change', onOrientationChange);
-        } else {
-            orientationQuery.addListener(onOrientationChange);
-        }
-        return () => {
-            window.removeEventListener('resize', refreshViewport);
-            window.removeEventListener('orientationchange', onOrientationChange);
-            if (orientationQuery.removeEventListener) {
-                orientationQuery.removeEventListener('change', onOrientationChange);
-            } else {
-                orientationQuery.removeListener(onOrientationChange);
-            }
-            orientationTimers.current.forEach(window.clearTimeout);
-        };
-    }, []);
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -110,9 +59,13 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
 
             setTimeout(() => {
                 setLoadingTextOpacity(0);
-                setTimeout(() => {
-                    setStartPopupOpacity(1);
-                }, 500);
+                if (isMobileExperience()) {
+                    setTimeout(start, 350);
+                } else {
+                    setTimeout(() => {
+                        setStartPopupOpacity(1);
+                    }, 500);
+                }
             }, 1000);
         }
     }, [progress]);
@@ -133,25 +86,6 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
             ui.style.pointerEvents = 'none';
         }
     }, []);
-
-    const viewMobilePortfolio = useCallback(() => {
-        window.location.assign('/os/?mobile=1');
-    }, []);
-
-    const startHorizontalExperience = useCallback(() => {
-        const currentViewport = getViewport();
-        setViewport(currentViewport);
-
-        if (currentViewport.isPortrait) {
-            setLandscapeMessage(
-                'Turn your phone sideways, then tap the button again.'
-            );
-            return;
-        }
-
-        setLandscapeMessage('');
-        start();
-    }, [start]);
 
     const getSpace = (sourceName: string) => {
         let spaces = '';
@@ -282,9 +216,7 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
             >
                 <div
                     style={styles.startPopup}
-                    className={`start-popup${
-                        viewport.isMobile ? ' start-popup-mobile' : ''
-                    }`}
+                    className="start-popup"
                 >
                     {/* <p style={styles.red}>
                         <b>THIS SITE IS CURRENTLY A W.I.P.</b>
@@ -296,76 +228,19 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
                         MOHAMED ISLAM · SOFTWARE ENGINEER
                     </p>
                     <h1 className="start-popup-title">Portfolio Showcase</h1>
-                    {viewport.isMobile && viewport.isPortrait && (
-                        <>
-                            <div className="orientation-card">
-                                <div className="phone-rotate" aria-hidden="true">
-                                    <span className="phone-shape" />
-                                    <span className="rotate-arrow">↻</span>
-                                </div>
-                                <div className="orientation-copy">
-                                    <p><b>Best in landscape</b></p>
-                                    <p>Turn your phone sideways, then tap the button below to open the full 3D desk.</p>
-                                </div>
-                            </div>
-                            {landscapeMessage && (
-                                <p className="orientation-feedback" role="status">
-                                    {landscapeMessage}
-                                </p>
-                            )}
-                            <div className="start-popup-actions">
-                                <button
-                                    type="button"
-                                    className="bios-action bios-action-primary"
-                                    onClick={startHorizontalExperience}
-                                >
-                                    START HORIZONTAL 3D
-                                </button>
-                                <button
-                                    type="button"
-                                    className="bios-action bios-action-secondary"
-                                    onClick={viewMobilePortfolio}
-                                >
-                                    VIEW MOBILE PORTFOLIO
-                                </button>
-                            </div>
-                        </>
-                    )}
-                    {(!viewport.isMobile || !viewport.isPortrait) && (
-                        <>
-                            {viewport.isMobile && (
-                                <p className="landscape-ready">● LANDSCAPE READY · TAP TO OPEN</p>
-                            )}
-                            <div className="start-prompt">
-                                <p>Everything is loaded. Choose how you want to explore.{`\xa0`}</p>
-                                <span className="blinking-cursor" />
-                            </div>
-                            <div className="start-popup-actions start-popup-actions-row">
-                                <button
-                                    type="button"
-                                    className="bios-action bios-action-primary"
-                                    onClick={
-                                        viewport.isMobile
-                                            ? startHorizontalExperience
-                                            : start
-                                    }
-                                >
-                                    {viewport.isMobile
-                                        ? 'START HORIZONTAL 3D'
-                                        : 'START 3D EXPERIENCE'}
-                                </button>
-                                {viewport.isMobile && (
-                                    <button
-                                        type="button"
-                                        className="bios-action bios-action-secondary"
-                                        onClick={viewMobilePortfolio}
-                                    >
-                                        MOBILE PORTFOLIO
-                                    </button>
-                                )}
-                            </div>
-                        </>
-                    )}
+                    <div className="start-prompt">
+                        <p>Everything is loaded. Choose how you want to explore.{`\xa0`}</p>
+                        <span className="blinking-cursor" />
+                    </div>
+                    <div className="start-popup-actions start-popup-actions-row">
+                        <button
+                            type="button"
+                            className="bios-action bios-action-primary"
+                            onClick={start}
+                        >
+                            START 3D EXPERIENCE
+                        </button>
+                    </div>
                     <p className="start-popup-footer">
                         Showcase 2026 · Web, mobile and AI projects
                     </p>

@@ -1,4 +1,5 @@
 import EventEmitter from './EventEmitter';
+import { syncExperienceViewport } from './Viewport';
 
 export default class Sizes extends EventEmitter {
     width: number;
@@ -9,14 +10,16 @@ export default class Sizes extends EventEmitter {
         super();
 
         // Setup
-        this.width = window.innerWidth;
-        this.height = window.innerHeight;
+        const viewport = syncExperienceViewport();
+        this.width = viewport.width;
+        this.height = viewport.height;
         this.pixelRatio = Math.min(window.devicePixelRatio, 2);
 
         // Resize event
         window.addEventListener('resize', () => {
-            this.width = window.innerWidth;
-            this.height = window.innerHeight;
+            const nextViewport = syncExperienceViewport();
+            this.width = nextViewport.width;
+            this.height = nextViewport.height;
             this.pixelRatio = Math.min(window.devicePixelRatio, 2);
 
             this.trigger('resize');

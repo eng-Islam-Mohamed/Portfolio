@@ -2,13 +2,14 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 // import eventBus from '../EventBus';
 import { motion } from 'framer-motion';
 import UIEventBus from '../EventBus';
+import { isMobileExperience } from '../../Utils/Viewport';
 
 const HELP_TEXT = 'Click anywhere to begin';
 
 type HelpPromptProps = {};
 
 const HelpPrompt: React.FC<HelpPromptProps> = () => {
-    const isMobile = window.innerWidth < 900;
+    const isMobile = isMobileExperience();
     const [helpText, setHelpText] = useState('');
     const [visible, setVisible] = useState(true);
     const visRef = useRef(visible);

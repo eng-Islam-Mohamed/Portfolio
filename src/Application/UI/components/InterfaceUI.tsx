@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import UIEventBus from '../EventBus';
 import InfoOverlay from './InfoOverlay';
 import MobileSceneControls from './MobileSceneControls';
+import { isMobileExperience } from '../../Utils/Viewport';
 
 interface InterfaceUIProps {}
 
@@ -45,7 +46,7 @@ const InterfaceUI: React.FC<InterfaceUIProps> = ({}) => {
             setInitLoad(false);
             if (interfaceRef.current) {
                 interfaceRef.current.style.pointerEvents =
-                    window.innerWidth < 900 ? 'auto' : 'none';
+                    isMobileExperience() ? 'auto' : 'none';
             }
         });
         UIEventBus.on('leftMonitor', () => {

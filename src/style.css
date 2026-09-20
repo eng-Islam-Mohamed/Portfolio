@@ -8,6 +8,25 @@ body {
     overflow: hidden;
 }
 
+html.force-landscape body {
+    position: fixed;
+    top: 0;
+    left: var(--screen-width);
+    width: var(--experience-width);
+    height: var(--experience-height);
+    transform: rotate(90deg);
+    transform-origin: top left;
+}
+
+html.force-landscape #css,
+html.force-landscape #webgl,
+html.force-landscape #overlay,
+html.force-landscape #ui,
+html.force-landscape #ui-interactive {
+    width: 100%;
+    height: 100%;
+}
+
 .webgl {
     position: fixed;
     top: 0;

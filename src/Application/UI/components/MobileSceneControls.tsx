@@ -1,30 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import UIEventBus from '../EventBus';
+import { getExperienceViewport } from '../../Utils/Viewport';
 
 type SceneMode = 'desk' | 'monitor';
 
-const isMobileViewport = () => {
-    const isTouchDevice =
-        navigator.maxTouchPoints > 0 ||
-        window.matchMedia('(pointer: coarse)').matches;
-
-    return (
-        window.innerWidth < 900 ||
-        (isTouchDevice && Math.min(window.innerWidth, window.innerHeight) < 900)
-    );
-};
-
 const MobileSceneControls: React.FC = () => {
-    const [isMobile, setIsMobile] = useState(isMobileViewport);
-    const [portrait, setPortrait] = useState(
-        window.matchMedia('(orientation: portrait)').matches
-    );
+    const [viewport, setViewport] = useState(getExperienceViewport);
     const [mode, setMode] = useState<SceneMode>('desk');
 
     useEffect(() => {
         const onResize = () => {
-            setIsMobile(isMobileViewport());
-            setPortrait(window.matchMedia('(orientation: portrait)').matches);
+            setViewport(getExperienceViewport());
         };
         const onEnterMonitor = () => setMode('monitor');
         const onLeaveMonitor = () => setMode('desk');
@@ -40,7 +26,7 @@ const MobileSceneControls: React.FC = () => {
         };
     }, []);
 
-    if (!isMobile) return <></>;
+    if (!viewport.isMobile) return <></>;
 
     const zoomToComputer = () => {
         setMode('monitor');
@@ -65,8 +51,8 @@ const MobileSceneControls: React.FC = () => {
                 <p id="prevent-click">
                     {mode === 'monitor'
                         ? 'The retro desktop is now active.'
-                        : portrait
-                        ? 'Portrait view · rotate for a wider scene'
+                        : viewport.forceLandscape
+                        ? 'Horizontal view · fitted for your iPhone'
                         : 'Landscape view · optimized for touch'}
                 </p>
             </div>
@@ -94,7 +80,7 @@ const MobileSceneControls: React.FC = () => {
                     className="mobile-fullscreen-button"
                     onClick={openFullscreen}
                 >
-                    OPEN FULLSCREEN
+                    MOBILE PORTFOLIO
                 </button>
             </div>
         </div>

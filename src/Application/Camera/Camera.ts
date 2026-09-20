@@ -9,6 +9,7 @@ import Resources from '../Utils/Resources';
 import UIEventBus from '../UI/EventBus';
 import Time from '../Utils/Time';
 import BezierEasing from 'bezier-easing';
+import { isMobileExperience } from '../Utils/Viewport';
 import {
     CameraKeyframeInstance,
     MonitorKeyframe,
@@ -204,7 +205,7 @@ export default class Camera extends EventEmitter {
     }
 
     isMobileViewport() {
-        return this.sizes.width < 900;
+        return isMobileExperience();
     }
 
     resize() {
