@@ -28,17 +28,29 @@ const MobileSceneControls: React.FC = () => {
 
     if (!viewport.isMobile) return <></>;
 
-    const zoomToComputer = () => {
+    const zoomToComputer = (
+        event?: React.MouseEvent | React.PointerEvent | React.TouchEvent
+    ) => {
+        event?.preventDefault();
+        event?.stopPropagation();
         setMode('monitor');
         UIEventBus.dispatch('mobileEnterMonitor', {});
     };
 
-    const backToDesk = () => {
+    const backToDesk = (
+        event?: React.MouseEvent | React.PointerEvent | React.TouchEvent
+    ) => {
+        event?.preventDefault();
+        event?.stopPropagation();
         setMode('desk');
         UIEventBus.dispatch('mobileLeaveMonitor', {});
     };
 
-    const openFullscreen = () => {
+    const openFullscreen = (
+        event?: React.MouseEvent | React.PointerEvent | React.TouchEvent
+    ) => {
+        event?.preventDefault();
+        event?.stopPropagation();
         window.location.assign('/os/?mobile=1');
     };
 
@@ -50,10 +62,8 @@ const MobileSceneControls: React.FC = () => {
                 </span>
                 <p id="prevent-click">
                     {mode === 'monitor'
-                        ? 'The retro desktop is now active.'
-                        : viewport.forceLandscape
-                        ? 'Horizontal view · fitted for your iPhone'
-                        : 'Landscape view · optimized for touch'}
+                        ? 'Tap the screen links · return to the desk anytime'
+                        : 'Drag anywhere to move the camera · tap Zoom for the screen'}
                 </p>
             </div>
             <div className="mobile-scene-actions" id="prevent-click">
@@ -62,6 +72,7 @@ const MobileSceneControls: React.FC = () => {
                         id="prevent-click"
                         type="button"
                         onClick={zoomToComputer}
+                        onTouchEnd={zoomToComputer}
                     >
                         ZOOM TO COMPUTER
                     </button>
@@ -70,6 +81,7 @@ const MobileSceneControls: React.FC = () => {
                         id="prevent-click"
                         type="button"
                         onClick={backToDesk}
+                        onTouchEnd={backToDesk}
                     >
                         BACK TO DESK
                     </button>
@@ -79,6 +91,7 @@ const MobileSceneControls: React.FC = () => {
                     type="button"
                     className="mobile-fullscreen-button"
                     onClick={openFullscreen}
+                    onTouchEnd={openFullscreen}
                 >
                     MOBILE PORTFOLIO
                 </button>

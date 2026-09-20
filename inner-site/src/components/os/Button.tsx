@@ -43,7 +43,7 @@ const Button: React.FC<ButtonProps> = ({ icon, text, onClick }) => {
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             style={outerBorderStyle}
-            onMouseDown={click}
+            onClick={click}
         >
             <div
                 style={Object.assign(

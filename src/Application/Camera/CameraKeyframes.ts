@@ -4,6 +4,7 @@ import Time from '../Utils/Time';
 import Application from '../Application';
 import Mouse from '../Utils/Mouse';
 import Sizes from '../Utils/Sizes';
+import { isMobileExperience } from '../Utils/Viewport';
 
 export class CameraKeyframeInstance {
     position: THREE.Vector3;
@@ -92,14 +93,26 @@ export class DeskKeyframe extends CameraKeyframeInstance {
     }
 
     update() {
-        if (this.sizes.width < 900) {
-            const portrait = this.sizes.height > this.sizes.width;
-            this.targetFoc.set(0, portrait ? 650 : 600, 0);
-            this.targetPos.set(
-                0,
-                portrait ? 1900 : 1650,
-                portrait ? 9800 : 5200
-            );
+        if (isMobileExperience()) {
+            const normalizedX = this.mouse.x / this.sizes.width - 0.5;
+            const normalizedY = this.mouse.y / this.sizes.height - 0.5;
+            const desiredFocalX = normalizedX * 900;
+            const desiredFocalY = 600 - normalizedY * 420;
+            const desiredPositionX = normalizedX * 1500;
+            const desiredPositionY = 1650 - normalizedY * 650;
+
+            this.targetFoc.x +=
+                (desiredFocalX - this.targetFoc.x) * 0.08;
+            this.targetFoc.y +=
+                (desiredFocalY - this.targetFoc.y) * 0.08;
+            this.targetFoc.z = 0;
+
+            this.targetPos.x +=
+                (desiredPositionX - this.targetPos.x) * 0.06;
+            this.targetPos.y +=
+                (desiredPositionY - this.targetPos.y) * 0.06;
+            this.targetPos.z = 5200;
+
             this.focalPoint.copy(this.targetFoc);
             this.position.copy(this.targetPos);
             return;

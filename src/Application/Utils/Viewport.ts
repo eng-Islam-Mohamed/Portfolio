@@ -44,3 +44,22 @@ export const syncExperienceViewport = () => {
 };
 
 export const isMobileExperience = () => getExperienceViewport().isMobile;
+
+export const clientPointToExperience = (clientX: number, clientY: number) => {
+    const viewport = getExperienceViewport();
+
+    if (viewport.forceLandscape) {
+        return {
+            x: Math.max(0, Math.min(viewport.width, clientY)),
+            y: Math.max(
+                0,
+                Math.min(viewport.height, window.innerWidth - clientX)
+            ),
+        };
+    }
+
+    return {
+        x: Math.max(0, Math.min(viewport.width, clientX)),
+        y: Math.max(0, Math.min(viewport.height, clientY)),
+    };
+};

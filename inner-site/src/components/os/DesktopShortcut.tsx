@@ -63,7 +63,13 @@ const DesktopShortcut: React.FC<DesktopShortcutProps> = ({
         [isSelected, setIsSelected, setLastSelected, lastSelected, shortcutId]
     );
 
-    const handleClickShortcut = useCallback(() => {
+    const handleClickShortcut = useCallback((event?: React.PointerEvent) => {
+        if (event?.pointerType === 'touch') {
+            onOpen && onOpen();
+            setIsSelected(false);
+            setDoubleClickTimerActive(false);
+            return;
+        }
         if (doubleClickTimerActive) {
             onOpen && onOpen();
             setIsSelected(false);
@@ -90,7 +96,7 @@ const DesktopShortcut: React.FC<DesktopShortcutProps> = ({
         <div
             id={`${shortcutId}`}
             style={Object.assign({}, styles.appShortcut, scaledStyle)}
-            onMouseDown={handleClickShortcut}
+            onPointerDown={handleClickShortcut}
             ref={containerRef}
         >
             <div id={`${shortcutId}`} style={styles.iconContainer}>

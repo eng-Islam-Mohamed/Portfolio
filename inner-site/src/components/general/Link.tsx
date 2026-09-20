@@ -51,7 +51,7 @@ const Link: React.FC<LinkProps> = (props) => {
     return (
         <RouterLink
             to={`/${props.to}`}
-            onMouseDown={handleClick}
+            onClick={handleClick}
             style={Object.assign({}, { display: 'flex' }, props.containerStyle)}
         >
             {isHere && <div style={styles.hereIndicator} />}
