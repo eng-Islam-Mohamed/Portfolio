@@ -58,6 +58,12 @@ export class MonitorKeyframe extends CameraKeyframeInstance {
 
     update() {
         const aspect = this.sizes.height / this.sizes.width;
+        if (isMobileExperience()) {
+            this.targetPos.z = 1800;
+            this.targetPos.y = 950;
+            this.position.copy(this.targetPos);
+            return;
+        }
         const additionalZoom = this.sizes.width < 768 ? 0 : 600;
         this.targetPos.z = this.origin.z + aspect * 1200 - additionalZoom;
         this.position.copy(this.targetPos);

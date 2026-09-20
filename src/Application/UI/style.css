@@ -420,24 +420,26 @@ html.force-landscape .mobile-scene-actions {
     .mobile-touch-rail {
         position: absolute;
         left: max(8px, env(safe-area-inset-left));
-        top: max(72px, env(safe-area-inset-top));
-        bottom: max(72px, env(safe-area-inset-bottom));
-        width: 82px;
+        top: 50%;
+        bottom: auto;
+        width: 54px;
+        height: min(285px, calc(100vh - 180px));
+        transform: translateY(-50%);
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
-        gap: 7px;
-        padding: 7px;
+        gap: 5px;
+        padding: 5px;
         color: #fff;
         background: rgba(0, 0, 0, 0.92);
-        border: 3px solid #fff;
-        box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.28);
+        border: 2px solid #fff;
+        box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.24);
         pointer-events: auto;
     }
 
     .mobile-touch-status {
-        min-height: 190px;
-        flex: 1;
+        min-height: 54px;
+        flex: 0 0 54px;
         position: relative;
         overflow: hidden;
         border-bottom: 1px solid #555;
@@ -456,21 +458,19 @@ html.force-landscape .mobile-scene-actions {
     }
 
     .mobile-touch-status strong {
-        top: 29%;
+        top: 50%;
         color: #67ff8a;
         font-size: 13px;
         letter-spacing: 0.7px;
     }
 
     .mobile-touch-status span {
-        top: 66%;
-        color: #ddd;
-        font-size: 10px;
+        display: none;
     }
 
     .mobile-touch-actions {
-        min-height: 430px;
-        flex: 2;
+        min-height: 0;
+        flex: 1;
         display: flex;
         flex-direction: column;
         gap: 7px;
@@ -479,7 +479,7 @@ html.force-landscape .mobile-scene-actions {
     .mobile-touch-actions button {
         position: relative;
         flex: 1;
-        min-height: 92px;
+        min-height: 72px;
         color: #000;
         background: #fff;
         border: 2px solid #fff;
@@ -489,7 +489,7 @@ html.force-landscape .mobile-scene-actions {
     }
 
     .mobile-touch-actions button span {
-        font-size: 11px;
+        font-size: 10px;
         font-weight: 700;
         letter-spacing: 0.3px;
         pointer-events: none;
@@ -508,14 +508,15 @@ html.force-landscape .mobile-scene-actions {
         top: auto;
         right: auto;
         bottom: max(10px, env(safe-area-inset-bottom));
-        width: min(720px, calc(100vw - 20px));
-        height: 78px;
+        width: min(330px, calc(100vw - 20px));
+        height: 54px;
+        transform: none;
         flex-direction: row;
     }
 
     .mobile-touch-status {
         min-height: 0;
-        min-width: 190px;
+        min-width: 86px;
         border-right: 1px solid #555;
         border-bottom: 0;
     }
@@ -541,7 +542,7 @@ html.force-landscape .mobile-scene-actions {
 
     .mobile-touch-actions button {
         min-height: 0;
-        min-width: 130px;
+        min-width: 86px;
     }
 }
 

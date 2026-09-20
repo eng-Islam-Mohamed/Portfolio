@@ -7,6 +7,7 @@ import Resources from '../Utils/Resources';
 import Sizes from '../Utils/Sizes';
 import Camera from '../Camera/Camera';
 import EventEmitter from '../Utils/EventEmitter';
+import { isMobileExperience } from '../Utils/Viewport';
 
 const SCREEN_SIZE = { w: 1280, h: 1024 };
 const IFRAME_PADDING = 32;
@@ -71,6 +72,13 @@ export default class MonitorScreen extends EventEmitter {
                 // @ts-ignore
                 this.inComputer = event.inComputer;
 
+                if (isMobileExperience()) {
+                    this.application.mouse.trigger('mousemove', [event]);
+                    this.prevInComputer = this.inComputer;
+                    this.shouldLeaveMonitor = false;
+                    return;
+                }
+
                 if (this.inComputer && !this.prevInComputer) {
                     this.camera.trigger('enterMonitor');
                 }
@@ -106,6 +114,12 @@ export default class MonitorScreen extends EventEmitter {
                 this.inComputer = event.inComputer;
                 this.application.mouse.trigger('mousedown', [event]);
 
+                if (isMobileExperience()) {
+                    this.mouseClickInProgress = false;
+                    this.shouldLeaveMonitor = false;
+                    return;
+                }
+
                 this.mouseClickInProgress = true;
                 this.prevInComputer = this.inComputer;
             },
@@ -117,6 +131,12 @@ export default class MonitorScreen extends EventEmitter {
                 // @ts-ignore
                 this.inComputer = event.inComputer;
                 this.application.mouse.trigger('mouseup', [event]);
+
+                if (isMobileExperience()) {
+                    this.mouseClickInProgress = false;
+                    this.shouldLeaveMonitor = false;
+                    return;
+                }
 
                 if (this.shouldLeaveMonitor) {
                     this.camera.trigger('leftMonitor');
