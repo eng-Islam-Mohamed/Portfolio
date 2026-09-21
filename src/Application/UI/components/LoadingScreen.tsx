@@ -234,7 +234,7 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
                     <div className="start-prompt">
                         <p>
                             {mobileExperience
-                                ? 'Everything is loaded. Tap once to enter with sound.'
+                                ? 'Everything is loaded. Tap once to enter.'
                                 : 'Everything is loaded. Choose how you want to explore.'}
                             {`\xa0`}
                         </p>
@@ -250,7 +250,7 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
                             onClick={startWithAudio}
                         >
                             {mobileExperience
-                                ? 'ENTER WITH SOUND'
+                                ? 'ENTER'
                                 : 'START 3D EXPERIENCE'}
                         </button>
                     </div>

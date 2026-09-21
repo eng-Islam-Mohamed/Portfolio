@@ -6,6 +6,7 @@ type SceneMode = 'desk' | 'monitor';
 
 const MobileTouchLayer: React.FC = () => {
     const [mobile, setMobile] = useState(getExperienceViewport().isMobile);
+    const [sceneStarted, setSceneStarted] = useState(false);
     const [mode, setMode] = useState<SceneMode>('desk');
     const [muted, setMuted] = useState(false);
     const [controlsOpen, setControlsOpen] = useState(true);
@@ -23,6 +24,7 @@ const MobileTouchLayer: React.FC = () => {
 
     useEffect(() => {
         const resize = () => setMobile(getExperienceViewport().isMobile);
+        const activate = () => setSceneStarted(true);
         const enter = () => {
             setMode('monitor');
             setControlsOpen(false);
@@ -34,18 +36,20 @@ const MobileTouchLayer: React.FC = () => {
 
         window.addEventListener('resize', resize);
         window.addEventListener('orientationchange', resize);
+        UIEventBus.on('loadingScreenDone', activate);
         UIEventBus.on('enterMonitor', enter);
         UIEventBus.on('leftMonitor', leave);
 
         return () => {
             window.removeEventListener('resize', resize);
             window.removeEventListener('orientationchange', resize);
+            UIEventBus.remove('loadingScreenDone', activate);
             UIEventBus.remove('enterMonitor', enter);
             UIEventBus.remove('leftMonitor', leave);
         };
     }, []);
 
-    if (!mobile) return null;
+    if (!mobile || !sceneStarted) return null;
 
     const sendPosition = (event: React.PointerEvent<HTMLDivElement>) => {
         UIEventBus.dispatch('mobileTouchMove', {
