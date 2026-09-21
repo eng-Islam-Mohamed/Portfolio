@@ -11,25 +11,25 @@ export const projects: PortfolioProject[] = [
     "name": "WorldLens",
     "subtitle": "Multilingual Country Explorer",
     "category": "Web · AI",
-    "description": "Explore countries in any language. WorldLens brings flags, capitals, borders, population, languages, currencies, and interactive maps into one visual discovery experience.",
+    "description": "Explore countries in any language. WorldLens uses Gemini to resolve native names, abbreviations, and imperfect spelling, then presents trusted geographic facts in a clear editorial atlas.",
     "features": [
       "Multilingual country search and typo interpretation",
-      "Detailed country profiles",
+      "Structured country profiles from local reference data",
       "Interactive maps with Leaflet"
     ],
-    "tags": "Next.js · TypeScript · AI · Leaflet",
+    "tags": "Next.js · TypeScript · Gemini · OpenRouter · Leaflet",
     "screenshots": [
       {
         "file": "worldlens.png",
-        "caption": "Landing page — a multilingual gateway to country discovery."
+        "caption": "Editorial landing experience — a clear, multilingual gateway to country discovery."
       },
       {
         "file": "worldlens-features.png",
-        "caption": "Features — multilingual search, country data, and interactive maps."
+        "caption": "Core experience — natural-language search, structured facts, and geographic context."
       },
       {
         "file": "worldlens-workflow.png",
-        "caption": "Discovery workflow — from a question to a country profile."
+        "caption": "AI country finder — search with native scripts, local names, abbreviations, or imperfect spelling."
       }
     ],
     "live": "https://world-between-your-hands.vercel.app",
