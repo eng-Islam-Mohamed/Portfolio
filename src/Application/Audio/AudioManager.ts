@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import Application from '../Application';
 import { AmbienceAudio, ComputerAudio } from './AudioSources';
 import UIEventBus from '../UI/EventBus';
+import { isMobileExperience } from '../Utils/Viewport';
 
 const POS_DEBUG = false;
 const DEFAULT_REF_DISTANCE = 10000;
@@ -18,6 +19,10 @@ export default class Audio {
     scene: THREE.Scene;
     sceneReady: boolean;
     audioUnlocked: boolean;
+    mobileAmbience: HTMLAudioElement | null;
+    mobileStartup: HTMLAudioElement | null;
+    mobileStartupPlayed: boolean;
+    muted: boolean;
 
     constructor() {
         this.application = new Application();
@@ -28,6 +33,10 @@ export default class Audio {
         this.audioPool = {};
         this.sceneReady = false;
         this.audioUnlocked = false;
+        this.mobileAmbience = null;
+        this.mobileStartup = null;
+        this.mobileStartupPlayed = false;
+        this.muted = false;
         this.context = this.listener.context;
 
         this.audioSources = {
@@ -52,15 +61,19 @@ export default class Audio {
         });
 
         UIEventBus.on('muteToggle', (mute: boolean) => {
+            this.muted = mute;
             this.listener.setMasterVolume(mute ? 0 : 1);
+            if (this.mobileAmbience) this.mobileAmbience.muted = mute;
+            if (this.mobileStartup) this.mobileStartup.muted = mute;
         });
     }
 
     unlockAudio() {
-        if (this.audioUnlocked && this.context.state === 'running') return;
-
         this.audioUnlocked = true;
-        const resume = this.context.resume();
+        this.playUnlockPulse();
+        const resume = this.context.state === 'running'
+            ? Promise.resolve()
+            : this.context.resume();
         this.startAmbienceWhenReady();
         if (resume) {
             resume.then(() => this.startAmbienceWhenReady()).catch(() => {});
@@ -69,7 +82,56 @@ export default class Audio {
 
     startAmbienceWhenReady() {
         if (!this.sceneReady || !this.audioUnlocked) return;
+        if (isMobileExperience()) {
+            this.startMobileAmbience();
+            return;
+        }
+        if (this.context.state !== 'running') return;
         this.audioSources.ambience.start();
+    }
+
+    playUnlockPulse() {
+        try {
+            const buffer = this.context.createBuffer(1, 1, 22050);
+            const source = this.context.createBufferSource();
+            source.buffer = buffer;
+            source.connect(this.context.destination);
+            source.start(0);
+        } catch {}
+    }
+
+    startMobileAmbience() {
+        if (!this.mobileAmbience) {
+            const ambience = document.createElement('audio');
+            ambience.src = '/audio/atmosphere/office.mp3';
+            ambience.loop = true;
+            ambience.preload = 'auto';
+            ambience.volume = 0.15;
+            ambience.muted = this.muted;
+            ambience.setAttribute('playsinline', '');
+            this.mobileAmbience = ambience;
+        }
+
+        if (this.mobileAmbience.paused) {
+            this.mobileAmbience.play().catch(() => {});
+        }
+
+        if (!this.mobileStartup) {
+            const startup = document.createElement('audio');
+            startup.src = '/audio/startup/startup.mp3';
+            startup.preload = 'auto';
+            startup.volume = 0.4;
+            startup.muted = this.muted;
+            startup.setAttribute('playsinline', '');
+            this.mobileStartup = startup;
+        }
+
+        if (!this.mobileStartupPlayed) {
+            this.mobileStartupPlayed = true;
+            this.mobileStartup.play().catch(() => {
+                this.mobileStartupPlayed = false;
+            });
+        }
     }
 
     playAudio(
