@@ -113,14 +113,40 @@ export const projects: PortfolioProject[] = [
     "tags": "Next.js · TypeScript · Translation workflows",
     "screenshots": [
       {
+        "file": "wasslago/home.png",
+        "caption": "Official website — connect directly with certified translators and choose a language pair."
+      },
+      {
+        "file": "wasslago/services.png",
+        "caption": "Translation services — practical use cases for work, study, immigration, and official documents."
+      },
+      {
+        "file": "wasslago/solutions.png",
+        "caption": "Platform values — direct communication, secure payments, flexible access, and digital or physical delivery."
+      },
+      {
+        "file": "wasslago/clients.png",
+        "caption": "Client experience — immediate access to independent certified translators."
+      },
+      {
+        "file": "wasslago/trust.png",
+        "caption": "Customer trust — verified reviews and service-quality highlights."
+      },
+      {
         "file": "wasslago-request.jpg",
         "caption": "Client workspace — guided translation request with language and service choices."
       },
       {
         "file": "wasslago-profile.jpg",
         "caption": "Translator profile — languages, availability, and service information."
+      },
+      {
+        "file": "wasslago-mobile.jpg",
+        "caption": "Responsive client workflow — translation requests remain clear and usable on mobile.",
+        "portrait": true
       }
     ],
+    "live": "https://www.wasslago.com/ar/",
     "repo": "https://github.com/eng-Islam-Mohamed/wasslago-app",
     "privateRepo": true
   },
