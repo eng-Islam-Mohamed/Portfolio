@@ -243,6 +243,73 @@ input:active {
     text-align: justify;
 }
 
+.about-intro {
+    display: grid;
+    grid-template-columns: 230px minmax(0, 1fr);
+    align-items: start;
+    gap: 28px;
+    margin: 18px 0 30px;
+}
+
+.about-intro-copy {
+    margin: 0;
+}
+
+.about-portrait-card {
+    margin: 0;
+    border: 2px solid #111;
+    background: #f8f7ef;
+    padding: 10px;
+    box-shadow: 6px 6px 0 #777;
+    transform: rotate(-1deg);
+}
+
+.about-portrait-frame {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border: 1px solid #111;
+    background: #d8d8d2;
+}
+
+.about-portrait-frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.025) 0 1px,
+        rgba(0, 0, 0, 0.035) 1px 2px
+    );
+}
+
+.about-portrait-frame img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: contrast(1.04);
+}
+
+.about-portrait-card figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 10px 3px 2px;
+    text-align: left;
+}
+
+.about-portrait-card figcaption strong {
+    font-family: 'MillenniumBold', serif;
+    font-size: 20px;
+}
+
+.about-portrait-card figcaption span {
+    font-family: 'Terminal', monospace;
+    font-size: 14px;
+}
+
 .expertise-block {
     text-align: left;
 }
@@ -288,6 +355,15 @@ input:active {
 }
 
 @media (max-width: 900px) {
+    .about-intro {
+        grid-template-columns: 1fr;
+    }
+
+    .about-portrait-card {
+        width: min(230px, calc(100% - 20px));
+        justify-self: center;
+    }
+
     .expertise-groups {
         grid-template-columns: 1fr;
     }

@@ -48,21 +48,40 @@ const About: React.FC = () => (
         <h3>I'm Mohamed Islam</h3>
         <br />
 
-        <div className="text-block">
-            <p>
-                I'm a software engineer from ESI — the National Higher School
-                of Computer Science in Algeria. I build web, mobile, and AI
-                solutions, with a focus on useful applications and thoughtful
-                interfaces.
-            </p>
-            <br />
-            <p>
-                Thank you for exploring my portfolio. This retro computer is a
-                way to discover my work, try a few games, and get to know the
-                person behind the code. If you have an idea or a question,
-                visit <Link to="/contact">the contact page</Link> or email{' '}
-                <a href="mailto:nm_benaboud@esi.dz">nm_benaboud@esi.dz</a>.
-            </p>
+        <div className="about-intro">
+            <figure className="about-portrait-card">
+                <div className="about-portrait-frame">
+                    <img
+                        src="/os/projects/mohamed-islam-portrait.png"
+                        alt="Mohamed Islam"
+                    />
+                </div>
+                <figcaption>
+                    <strong>Mohamed Islam</strong>
+                    <span>Software Engineer · ESI</span>
+                </figcaption>
+            </figure>
+
+            <div className="text-block about-intro-copy">
+                <p>
+                    I'm a software engineer from ESI — the National Higher
+                    School of Computer Science in Algeria. I build web, mobile,
+                    and AI solutions, with a focus on useful applications and
+                    thoughtful interfaces.
+                </p>
+                <br />
+                <p>
+                    Thank you for exploring my portfolio. This retro computer
+                    is a way to discover my work, try a few games, and get to
+                    know the person behind the code. If you have an idea or a
+                    question, visit{' '}
+                    <Link to="/contact">the contact page</Link> or email{' '}
+                    <a href="mailto:nm_benaboud@esi.dz">
+                        nm_benaboud@esi.dz
+                    </a>
+                    .
+                </p>
+            </div>
         </div>
 
         <ResumeDownload />
