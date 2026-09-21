@@ -5,6 +5,7 @@ import { isMobileExperience } from '../../Utils/Viewport';
 type LoadingProps = {};
 
 const LoadingScreen: React.FC<LoadingProps> = () => {
+    const [mobileExperience] = useState(() => isMobileExperience());
     const [progress, setProgress] = useState(0);
     const [toLoad, setToLoad] = useState(0);
     const [loaded, setLoaded] = useState(0);
@@ -59,16 +60,12 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
 
             setTimeout(() => {
                 setLoadingTextOpacity(0);
-                if (isMobileExperience()) {
-                    setTimeout(start, 350);
-                } else {
-                    setTimeout(() => {
-                        setStartPopupOpacity(1);
-                    }, 500);
-                }
+                setTimeout(() => {
+                    setStartPopupOpacity(1);
+                }, mobileExperience ? 250 : 500);
             }, 1000);
         }
-    }, [progress]);
+    }, [progress, mobileExperience]);
 
     useEffect(() => {
         if (webGLError) {
@@ -86,6 +83,12 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
             ui.style.pointerEvents = 'none';
         }
     }, []);
+
+    const startWithAudio = useCallback(() => {
+        eventBus.dispatch('unlockAudio', {});
+        eventBus.dispatch('muteToggle', false);
+        start();
+    }, [start]);
 
     const getSpace = (sourceName: string) => {
         let spaces = '';
@@ -229,16 +232,26 @@ const LoadingScreen: React.FC<LoadingProps> = () => {
                     </p>
                     <h1 className="start-popup-title">Portfolio Showcase</h1>
                     <div className="start-prompt">
-                        <p>Everything is loaded. Choose how you want to explore.{`\xa0`}</p>
+                        <p>
+                            {mobileExperience
+                                ? 'Everything is loaded. Tap once to enter with sound.'
+                                : 'Everything is loaded. Choose how you want to explore.'}
+                            {`\xa0`}
+                        </p>
                         <span className="blinking-cursor" />
                     </div>
                     <div className="start-popup-actions start-popup-actions-row">
                         <button
                             type="button"
                             className="bios-action bios-action-primary"
-                            onClick={start}
+                            onPointerDown={() =>
+                                eventBus.dispatch('unlockAudio', {})
+                            }
+                            onClick={startWithAudio}
                         >
-                            START 3D EXPERIENCE
+                            {mobileExperience
+                                ? 'ENTER WITH SOUND'
+                                : 'START 3D EXPERIENCE'}
                         </button>
                     </div>
                     <p className="start-popup-footer">
