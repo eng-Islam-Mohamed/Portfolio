@@ -7,6 +7,30 @@ export type PortfolioProject = {
 };
 export const projects: PortfolioProject[] = [
   {
+    "id": "ai-opportunity-hunter",
+    "name": "AI Opportunity Hunter",
+    "subtitle": "Evidence-Based B2B Opportunity Intelligence",
+    "category": "Web · AI",
+    "description": "A private research workspace that helps service providers turn a target market and an offer into a ranked shortlist of potential business opportunities. The public interactive demo illustrates how evidence, a detected problem, and a practical proposed service come together in a clear opportunity brief.",
+    "features": [
+      "Market and service focused opportunity discovery",
+      "Ranked shortlists with evidence, scores, and recommended offers",
+      "Opportunity dossiers that explain the reasoning behind each lead"
+    ],
+    "tags": "Next.js · B2B intelligence · AI · Research workflow",
+    "screenshots": [
+      {
+        "file": "opportunity-hunter/home.png",
+        "caption": "Landing page — introduce the evidence-first approach to B2B opportunity research."
+      },
+      {
+        "file": "opportunity-hunter/demo.png",
+        "caption": "Interactive demo — an illustrative ranked shortlist with detected problems, recommended offers, and scores."
+      }
+    ],
+    "live": "https://ai-opportunity-hunter-gules.vercel.app/"
+  },
+  {
     "id": "worldlens",
     "name": "WorldLens",
     "subtitle": "Multilingual Country Explorer",
