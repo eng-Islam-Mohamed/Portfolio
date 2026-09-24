@@ -9,19 +9,20 @@ export const projects: PortfolioProject[] = [
   {
     id: "math-agent",
     name: "Math Agent",
-    subtitle: "AI Mathematics Solver",
+    subtitle: "AI Mathematics Laboratory",
     category: "Web · AI Education",
-    description: "A mathematics assistant that routes questions by difficulty, explains each step, and asks a second model to review the answer. The public text demo runs in the browser; the repository also contains the original Python workflow for image and audio input, PDF generation, and optional Google delivery.",
+    description: "The original Maths AI Agent interface is live for text, photo, and voice math problems. It extracts a question, routes it by difficulty, shows a step-by-step solution, and asks a second AI model to review the answer. The public version supports browser PDF export; the local Python project also includes advanced PDF generation and optional Gmail and Google Sheets delivery.",
     features: [
-      "Live text solving with difficulty-based model routing",
-      "Step-by-step answers with a separate AI review",
-      "Responsive demo with browser PDF export and limited public requests"
+      "Live text, photo, and voice math input",
+      "Step-by-step answers with difficulty-based model routing and separate AI review",
+      "Browser PDF export and a three-solves-per-IP limit every ten minutes"
     ],
     tags: "Next.js · TypeScript · Python · FastAPI · LangGraph · AI",
     screenshots: [
-      { file: "math-agent-home.png", caption: "Live demo — enter a math problem or choose a sample." },
-      { file: "math-agent-solution.png", caption: "Worked result — inspect the reasoning, final answer, and AI review." },
-      { file: "math-agent-mobile.png", caption: "Mobile view — the solver adapts to a narrow screen.", portrait: true }
+      { file: "math-agent-original-home.png", caption: "Original Math Agent interface — text entry and configurable solution modes." },
+      { file: "math-agent-original-photo.png", caption: "Photo input — upload a picture of a mathematics problem." },
+      { file: "math-agent-original-result.png", caption: "Worked solution — reasoning, final answer, and a separate AI review." },
+      { file: "math-agent-original-mobile.png", caption: "Mobile view — the original interface adapts to a narrow screen.", portrait: true }
     ],
     live: "https://math-agent-demo.vercel.app",
     repo: "https://github.com/eng-Islam-Mohamed/math-agent"
