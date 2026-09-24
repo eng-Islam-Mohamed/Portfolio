@@ -7,6 +7,26 @@ export type PortfolioProject = {
 };
 export const projects: PortfolioProject[] = [
   {
+    id: "math-agent",
+    name: "Math Agent",
+    subtitle: "AI Mathematics Solver",
+    category: "Web · AI Education",
+    description: "A mathematics assistant that routes questions by difficulty, explains each step, and asks a second model to review the answer. The public text demo runs in the browser; the repository also contains the original Python workflow for image and audio input, PDF generation, and optional Google delivery.",
+    features: [
+      "Live text solving with difficulty-based model routing",
+      "Step-by-step answers with a separate AI review",
+      "Responsive demo with browser PDF export and limited public requests"
+    ],
+    tags: "Next.js · TypeScript · Python · FastAPI · LangGraph · AI",
+    screenshots: [
+      { file: "math-agent-home.png", caption: "Live demo — enter a math problem or choose a sample." },
+      { file: "math-agent-solution.png", caption: "Worked result — inspect the reasoning, final answer, and AI review." },
+      { file: "math-agent-mobile.png", caption: "Mobile view — the solver adapts to a narrow screen.", portrait: true }
+    ],
+    live: "https://math-agent-demo.vercel.app",
+    repo: "https://github.com/eng-Islam-Mohamed/math-agent"
+  },
+  {
     "id": "ai-opportunity-hunter",
     "name": "AI Opportunity Hunter",
     "subtitle": "Evidence-Based B2B Opportunity Intelligence",
