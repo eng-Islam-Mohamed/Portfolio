@@ -11,18 +11,22 @@ export const projects: PortfolioProject[] = [
     name: "Math Agent",
     subtitle: "AI Mathematics Laboratory",
     category: "Web · AI Education",
-    description: "The original Maths AI Agent interface is live for text, photo, and voice math problems. It extracts a question, routes it by difficulty, shows a step-by-step solution, and asks a second AI model to review the answer. The public version supports browser PDF export; the local Python project also includes advanced PDF generation and optional Gmail and Google Sheets delivery.",
+    description: "The original Maths AI Agent interface is live for text, photo, and voice math problems. It extracts a question, routes it by difficulty, and provides eight solution modes with curriculum, explanation, tutor, student-attempt, and whiteboard controls. Results include rendered formulas, a separate AI review, and a downloadable PDF. The local Python project also includes optional Gmail and Google Sheets delivery.",
     features: [
       "Live text, photo, and voice math input",
-      "Step-by-step answers with difficulty-based model routing and separate AI review",
-      "Browser PDF export and a three-solves-per-IP limit every ten minutes"
+      "Eight solution modes, tutor hints, student-attempt diagnosis, and teacher guidance",
+      "Rendered LaTeX, separate AI review, PDF download, and a three-solves-per-IP limit every ten minutes"
     ],
     tags: "Next.js · TypeScript · Python · FastAPI · LangGraph · AI",
     screenshots: [
       { file: "math-agent-original-home.png", caption: "Original Math Agent interface — text entry and configurable solution modes." },
       { file: "math-agent-original-photo.png", caption: "Photo input — upload a picture of a mathematics problem." },
       { file: "math-agent-original-result.png", caption: "Worked solution — reasoning, final answer, and a separate AI review." },
-      { file: "math-agent-original-mobile.png", caption: "Mobile view — the original interface adapts to a narrow screen.", portrait: true }
+      { file: "math-agent-original-mobile.png", caption: "Mobile view — the original interface adapts to a narrow screen.", portrait: true },
+      { file: "math-agent-proof-2026.png", caption: "Proof mode — a contradiction proof with rendered LaTeX and direct PDF download." },
+      { file: "math-agent-diagnosis-2026.png", caption: "Mistake diagnosis — first wrong step, corrected reasoning, and whiteboard feedback." },
+      { file: "math-agent-teacher-2026.png", caption: "Teacher mode — grading focus, misconceptions, discussion prompt, and tutor path." },
+      { file: "math-agent-arabic-2026.png", caption: "Arabic solution — right-to-left explanation and mathematics rendering." }
     ],
     live: "https://math-agent-demo.vercel.app",
     repo: "https://github.com/eng-Islam-Mohamed/math-agent"
