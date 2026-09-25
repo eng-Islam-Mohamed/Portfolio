@@ -60,13 +60,13 @@ export const projects: PortfolioProject[] = [
     "name": "WorldLens",
     "subtitle": "Multilingual Country Explorer",
     "category": "Web · AI",
-    "description": "Explore countries in any language. WorldLens uses Gemini to resolve native names, abbreviations, and imperfect spelling, then presents trusted geographic facts in a clear editorial atlas.",
+    "description": "Explore countries in any language. WorldLens uses AI to resolve native names, abbreviations, and imperfect spelling, then presents geographic facts in a clear editorial atlas.",
     "features": [
       "Multilingual country search and typo interpretation",
       "Structured country profiles from local reference data",
       "Interactive maps with Leaflet"
     ],
-    "tags": "Next.js · TypeScript · Gemini · OpenRouter · Leaflet",
+    "tags": "Next.js · TypeScript · AI · Leaflet",
     "screenshots": [
       {
         "file": "worldlens.png",
@@ -138,6 +138,21 @@ export const projects: PortfolioProject[] = [
       {
         "file": "sanad/verification.png",
         "caption": "Verification home — text, voice, and image entry options.",
+        "portrait": true
+      },
+      {
+        "file": "sanad/result.png",
+        "caption": "Verification results — matched narration, grading, and source context.",
+        "portrait": true
+      },
+      {
+        "file": "sanad/explanation.png",
+        "caption": "Source details — references and an explanation of the narration.",
+        "portrait": true
+      },
+      {
+        "file": "sanad/reading-dark.png",
+        "caption": "Reading mode — focused Arabic text in a dark theme.",
         "portrait": true
       }
     ],
@@ -267,8 +282,23 @@ export const projects: PortfolioProject[] = [
         "portrait": true
       },
       {
+        "file": "outsider/categories.png",
+        "caption": "Category selection — choose the theme for the next round.",
+        "portrait": true
+      },
+      {
+        "file": "outsider/role-reveal.png",
+        "caption": "Private role card — reveal each player's role before the round.",
+        "portrait": true
+      },
+      {
         "file": "outsider/voting.png",
         "caption": "Voting phase — players choose who they suspect is the outsider.",
+        "portrait": true
+      },
+      {
+        "file": "outsider/guess.png",
+        "caption": "Outsider's guess — choose the secret word from the answer wall.",
         "portrait": true
       },
       {
