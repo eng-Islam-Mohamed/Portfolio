@@ -7,6 +7,28 @@ export type PortfolioProject = {
 };
 export const projects: PortfolioProject[] = [
   {
+    id: "pandas-pink-store",
+    name: "Panda’s Pink Store",
+    subtitle: "Custom Sticker Storefront",
+    category: "Web · E-commerce",
+    description: "An Arabic storefront for an Algerian sticker studio. Shoppers can explore sticker collections in 3D, preview a design, and request a custom order with an optional reference image.",
+    features: [
+      "Right-to-left storefront with an interactive 3D collection browser",
+      "Sticker sheet previews and a list view for browsing collections",
+      "Custom order form with quantity, design notes, and reference image upload"
+    ],
+    tags: "React · Vite · Three.js · GSAP · Firebase",
+    screenshots: [
+      { file: "pandas-pink-store/storefront.jpg", caption: "Storefront home with Arabic navigation and a direct path to custom orders." },
+      { file: "pandas-pink-store/collections.jpg", caption: "Interactive 3D ribbon for browsing and previewing sticker collections." },
+      { file: "pandas-pink-store/custom-order.jpg", caption: "Order builder with selectable sticker sheets and a product preview." },
+      { file: "pandas-pink-store/order-form.jpg", caption: "Custom order form with quantity, design notes, and an optional reference image." }
+    ],
+    live: "https://pandas-pink-store-live.vercel.app/",
+    repo: "https://github.com/eng-Islam-Mohamed/pandas-pink-store",
+    privateRepo: true
+  },
+  {
     id: "math-agent",
     name: "Math Agent",
     subtitle: "AI Mathematics Laboratory",
